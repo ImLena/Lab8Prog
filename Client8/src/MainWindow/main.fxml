@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1321.0" style="-fx-background-color: #5EC4CD;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindow.MainController">
+
+    <Label id="userName" fx:id="usernameLabel" layoutX="15.0" layoutY="15.0" prefHeight="26.0" prefWidth="130.0" text="username">
+        <font>
+            <Font name="Microsoft Yahei" size="25.0" />
+        </font>
+    </Label>
+    <ComboBox fx:id="lang" layoutX="1190.0" layoutY="25.0" onAction="#langChoose" prefHeight="24.0" prefWidth="120.0" />
+    <VBox layoutX="15.0" layoutY="72.0" spacing="8">
+    <Button fx:id="help" layoutX="15.0" layoutY="237.0" mnemonicParsing="false" onAction="#help" prefHeight="26.0" prefWidth="122.0" text="Help">
+    <style>-fx-background-color: #006561;</style>
+   </Button>
+   <Button fx:id="exit" layoutX="15.0" layoutY="319.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="122.0" text="Exit">
+       <style>-fx-background-color: #006561;</style>
+   </Button>
+        <Button fx:id="history" layoutX="15.0" layoutY="167.0" mnemonicParsing="false" onAction="#history" prefHeight="26.0" prefWidth="122.0" text="History">
+        <style>-fx-background-color: #006561;</style>
+        </Button>
+        <Button fx:id="info" layoutX="15.0" layoutY="276.0" mnemonicParsing="false" onAction="#info" prefHeight="26.0" prefWidth="122.0" text="Info">
+            <style>-fx-background-color: #006561;</style>
+        </Button>
+        <Button fx:id="execute_script" mnemonicParsing="false" onAction="#execute_script" prefHeight="26.0" prefWidth="122.0" text="Execute script">
+            <style>-fx-background-color: #006561;</style>
+        </Button>
+    </VBox>
+   <TableView fx:id="tickets" layoutX="154.0" layoutY="68.0" prefHeight="501.0" prefWidth="836.0">
+     <columns>
+       <TableColumn fx:id="id" prefWidth="34.800018310546875" text="ID" />
+       <TableColumn fx:id="name" prefWidth="85.19998168945312" text="Name" />
+         <TableColumn prefWidth="32.600006103515625" text="x" fx:id="x" />
+         <TableColumn fx:id="y" minWidth="3.5999755859375" prefWidth="32.79998779296875" text="y" />
+         <TableColumn fx:id="creationDate" prefWidth="98.00003051757812" text="CreationDate" />
+         <TableColumn fx:id="price" prefWidth="58.79998779296875" text="Price" />
+         <TableColumn fx:id="type" prefWidth="86.60003662109375" text="Type" />
+         <TableColumn fx:id="height" prefWidth="66.5999755859375" text="Height" />
+         <TableColumn prefWidth="34.5999755859375" text="xPl" fx:id="xPl" />
+         <TableColumn fx:id="yPl" prefWidth="32.0" text="yPl" />
+         <TableColumn fx:id="zPl" minWidth="9.39996337890625" prefWidth="38.00006103515625" text="zPl" />
+         <TableColumn fx:id="place" prefWidth="112.79998779296875" text="Place" />
+         <TableColumn fx:id="user" prefWidth="131.7999267578125" text="User" />
+     </columns>
+   </TableView>
+   <TextArea fx:id="textRes" layoutX="154.0" layoutY="583.0" prefHeight="102.0" prefWidth="836.0" />
+    <HBox layoutX="160.0" layoutY="25.0" spacing="5">
+   <Button fx:id="clear" layoutX="155.0" layoutY="25.0" mnemonicParsing="false" onAction="#clear" text="Clear" />
+   <Button fx:id="insert" layoutX="462.0" layoutY="25.0" mnemonicParsing="false" onAction="#insert" text="Insert" />
+   <Button fx:id="min_by_creation_date" layoutX="529.0" layoutY="25.0" mnemonicParsing="false" onAction="#min_by_creation_date" text="Min by creation date" />
+   <Button fx:id="remove_key" layoutX="673.0" layoutY="25.0" mnemonicParsing="false" onAction="#remove_key" text="Remove (id)" />
+   <Button fx:id="replace_if_greater" layoutX="768.0" layoutY="25.0" mnemonicParsing="false" onAction="#replace_if_greater" text="Replace if greater" />
+   <Button fx:id="update" layoutX="304.0" layoutY="25.0" mnemonicParsing="false" onAction="#update" text="Update" />
+        <Button fx:id="remove_greater" layoutX="367.0" layoutY="25.0" mnemonicParsing="false" onAction="#remove_greater" text="Remove greater" />
+        <Button fx:id="count_greater_than_price" layoutX="492.0" layoutY="26.0" mnemonicParsing="false" onAction="#count_greater_than_price" text="Count greater than price" />
+    </HBox>
+    <TextField fx:id="arg" layoutX="1084.0" layoutY="24.0" prefHeight="26.0" prefWidth="89.0" />
+   <Label fx:id="argument" layoutX="1084.0" layoutY="5.0" text="Argument" />
+    <VBox layoutX="15.0" layoutY="250.0">
+        <TextField fx:id="idFilter" layoutX="1000.0" prefHeight="23.0" prefWidth="69.0" promptText="id" />
+        <TextField fx:id="nameFilter" layoutX="1000.0" prefHeight="12.0" prefWidth="37.0" promptText="name" />
+        <TextField fx:id="crDateFilter" layoutX="1000.0" prefHeight="20.0" prefWidth="82.0" promptText="creationDate" />
+             <TextField layoutX="1000.0" prefHeight="20.0" prefWidth="53.0" promptText="x" fx:id="xFilter" />
+               <TextField fx:id="yFilter" layoutX="1000.0" prefHeight="20.0" prefWidth="53.0" promptText="y" />
+        <TextField fx:id="heightFilter" layoutX="1000.0" prefHeight="13.0" prefWidth="64.0" promptText="height" />
+        <TextField fx:id="priceFilter" layoutX="1000.0" prefHeight="22.0" prefWidth="64.0" promptText="price" />
+        <TextField fx:id="placeFilter" layoutX="1000.0" prefHeight="22.0" prefWidth="64.0" promptText="place" />
+        <TextField fx:id="typeFilter" prefHeight="6.0" prefWidth="75.0" promptText="type" />
+        <TextField prefHeight="11.0" prefWidth="81.0" promptText="xPl" fx:id="xPlFilter" />
+        <TextField fx:id="yPlFilter" prefHeight="18.0" prefWidth="72.0" promptText="yPl" />
+        <TextField fx:id="zPlFilter" prefHeight="21.0" prefWidth="63.0" promptText="zPl" />
+        <TextField fx:id="userFilter" prefHeight="20.0" prefWidth="53.0" promptText="user" />
+    </VBox>
+    <TabPane fx:id="tabPane" layoutX="1005.0" layoutY="68.0" maxWidth="Infinity" prefHeight="615.0" prefWidth="302.0" tabClosingPolicy="UNAVAILABLE">
+    <Tab fx:id="tabDraw" text="visualization" >
+
+    <FlowPane fx:id="drawing" style="-fx-background-color: white;">
+      <opaqueInsets>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </opaqueInsets></FlowPane>
+    </Tab>
+    </TabPane>
+
+        <!--      <TabPane prefHeight="373.0" prefWidth="389.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <Tab fx:id="tabTable" text="Таблица Space Marines">
+                 <AnchorPane prefHeight="336.0" prefWidth="455.0">
+                     <FilteredTableView fx:id="tableMarines" AnchorPane.bottomAnchor="5.0"
+                                        AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+                                        AnchorPane.topAnchor="5.0">
+                         <columns>
+                             <FilterableLongTableColumn fx:id="idCol" prefWidth="50.0" text="id"/>
+                             <FilterableStringTableColumn fx:id="nameCol" prefWidth="100.0" text="name"/>
+                             <FilterableIntegerTableColumn fx:id="xCol" prefWidth="100.0" text="x"/>
+                             <FilterableLongTableColumn fx:id="yCol" prefWidth="100.0" text="y"/>
+                             <FilterableFloatTableColumn fx:id="dateCol" prefWidth="100.0" text="date"/>
+                             <FilterableLongTableColumn fx:id="priceCountColumn" prefWidth="100.0" text="price"/>
+                             <FilterableBooleanTableColumn fx:id="typeColumn" prefWidth="100.0" text="type"/>
+                             <FilterableEnumTableColumn fx:id="heightColumn" prefWidth="100.0" text="height"/>
+                             <FilterableStringTableColumn fx:id="xPlColumn" prefWidth="100.0" text="xPl"/>
+                             <FilterableStringTableColumn fx:id="yPlColumn" prefWidth="100.0" text="yPl"/>
+                             <FilterableStringTableColumn fx:id="zPlColumn" prefWidth="100.0" text="zPl"/>
+                             <FilterableDateTableColumn fx:id="placeColumn" prefWidth="100.0" text="place"/>
+                             <FilterableStringTableColumn fx:id="userColumn" prefWidth="100.0" text="user"/>
+                         </columns>
+                     </FilteredTableView>
+                 </AnchorPane>
+             </Tab>-->
+</AnchorPane>

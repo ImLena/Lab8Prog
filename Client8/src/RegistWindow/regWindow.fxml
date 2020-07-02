@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane focusTraversable="true" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: #5EC4CD;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistWindow.RegWindow">
+   <!-- <MenuBar prefHeight="25.0" prefWidth="260.0">
+        <Menu fx:id="selectLanguage" mnemonicParsing="false" text="Выбрать язык">&lt;!&ndash;
+            <MenuItem mnemonicParsing="false" onAction="#switchRussian" text="Русский"/>
+            <MenuItem mnemonicParsing="false" onAction="#switchNorwegian" text="Norsk"/>&ndash;&gt;
+            <MenuItem mnemonicParsing="false" onAction="#switchHungarian" text="Magyar"/>
+            <MenuItem mnemonicParsing="false" onAction="#switchSpanish" text="Español"/>
+        </Menu>
+    </MenuBar>-->
+        <Text fx:id="str1" fill="#033B39" layoutX="25.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" wrappingWidth="187.30078125">
+            <font>
+                <Font name="Microsoft Yahei" size="30.0" />
+            </font>
+        </Text>
+        <Text fx:id="str2" fill="#033B39" layoutX="25.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, log in or" wrappingWidth="500">
+            <font>
+                <Font name="Microsoft Yahei" size="30.0" />
+            </font>
+        </Text>
+        <Text fx:id="str3" fill="#033B39" layoutX="25.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="register to start working!" wrappingWidth="500">
+            <font>
+                <Font name="Microsoft Yahei" size="30.0" />
+            </font>
+        </Text><Text fx:id="loginStr" fill="#033B39" layoutX="25.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" wrappingWidth="500">
+            <font>
+                <Font name="Microsoft Yahei" size="18.0" />
+            </font>
+        </Text>
+        <TextField fx:id="username" layoutX="25.0" layoutY="270.0" prefHeight="50.0" prefWidth="475.0" />
+        <Text fx:id="passStr" fill="#033B39" layoutX="25.0" layoutY="355.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="500">
+            <font>
+                <Font name="Microsoft Yahei" size="18.0" />
+            </font>
+        </Text>
+        <Button fx:id="logInButton" alignment="CENTER" layoutX="25.0" layoutY="390.0" mnemonicParsing="false" onAction="#loginButtonClick" onMouseClicked="#loginButtonClick" text="Log in" textFill="#04080f" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="500.0">
+            <style>-fx-background-color: #006561;</style>
+            <font>
+                <Font name="Microsoft Yahei" size="25.0" />
+            </font>
+        </Button>
+        <Button fx:id="registerButton" alignment="CENTER" layoutX="25.0" layoutY="420.0" mnemonicParsing="false" onAction="#registerButtonClick" onMouseClicked="#registerButtonClick" text="Register" textFill="#04080f" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="570.0">
+            <style>-fx-background-color: #006561;</style>
+            <font>
+                <Font name="Microsoft Yahei" size="25.0" />
+            </font>
+        </Button>
+   <PasswordField fx:id="password" layoutX="25.0" layoutY="370.0" prefHeight="50.0" prefWidth="475.0" />
+    <ComboBox fx:id="lang" layoutX="286.0" layoutY="40.0" onAction="#langChoose" prefHeight="24.0" prefWidth="187.0" />
+</AnchorPane>
