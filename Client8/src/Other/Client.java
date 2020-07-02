@@ -52,7 +52,7 @@ public class Client {
         }
     }
 
-    public static void client(String login, String pas) throws InterruptedException {
+  /*  public static void client(String login, String pas) throws InterruptedException {
         CommandInvoker commandInvoker = new CommandInvoker();
 
         try{
@@ -66,7 +66,6 @@ public class Client {
             Command info = new Info(cr);
             Command insert = new Insert(cr);
             Command mbcd = new MinByCreationDate(cr);
-            Command pd = new PrintDescending(cr);
             Command remove = new Remove(cr);
             Command rg = new RemoveGreater(cr);
             Command rig = new ReplaceIfGreater(cr);
@@ -81,7 +80,6 @@ public class Client {
             commandInvoker.addCom("info", info);
             commandInvoker.addCom("insert", insert);
             commandInvoker.addCom("min_by_creation_date", mbcd);
-            commandInvoker.addCom("print_descending", pd);
             commandInvoker.addCom("remove_key", remove);
             commandInvoker.addCom("remove_greater", rg);
             commandInvoker.addCom("replace_if_greater", rig);
@@ -113,7 +111,7 @@ public class Client {
                 ex.printStackTrace();
             }
         }
-    }
+    }*/
 
     public static Answer getMessage() throws IOException, ClassNotFoundException {
         try {

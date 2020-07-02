@@ -275,6 +275,10 @@ public class Ticket implements Comparable, Serializable {
             this.xPl = xPl;
             return this;
         }
+        public StringProperty getNameProperty() {
+            return new SimpleStringProperty(name);
+        }
+
 
         public CreateTicket yPl(Float yPl) {
             this.yPl = yPl;

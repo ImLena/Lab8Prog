@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -12,7 +14,7 @@ public class Exit extends Command {
     }
 
     @Override
-    protected void execute(String[] args, Scanner in) throws IOException {
+    protected void execute(String[] args, Scanner in, Ticket t) throws IOException {
         commandReceiver.exit();
     }
 

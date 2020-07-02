@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -31,6 +32,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.util.Duration;
+import sun.jvm.hotspot.oops.FloatField;
 
 
 import java.io.*;
@@ -61,9 +63,6 @@ public class MainController implements Initializable {
     TextField yFilter;
     @FXML
     TextField heightFilter;
-
-    @FXML
-    TextField coordinatesFilter;
     @FXML
     TextField crDateFilter;
     @FXML
@@ -148,24 +147,8 @@ public class MainController implements Initializable {
     private Button history;
     @FXML
     private Label argument;
-
-
-    /*
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-        fillLanguage();
-        putTableData();
-        drawPeople();
-    }*/
-
-
-
     @FXML
     private Label usernameLabel;
-    @FXML
-    private Pane pane;
 
 
     @Override
@@ -197,11 +180,11 @@ public class MainController implements Initializable {
             } else {
                 log.info("User logged in");
                 usernameLabel.setText(/*currentBundle.getString("username") + */client.getLogin());
-
                 setCommands();
                 getCollection();
                 fillTable();
                 visual();
+                getTableDoubleClick();setUpTimer();
 
             }
         } catch (IOException e) {
@@ -211,7 +194,15 @@ public class MainController implements Initializable {
         }
     }
 
-        private void showAlert(Alert.AlertType alertType, String title, String content) {
+    public void setAnswer(String s){
+        textRes.setText(currentBundle.getString(s));
+    }
+
+    public void setNubmerAnswer(String s) {
+        textRes.setText(s);
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -232,8 +223,24 @@ public class MainController implements Initializable {
     }
 
     private void fillTable() {
+        tickets.setEditable(true);
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+//        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        name.setCellFactory(TextFieldTableCell.forTableColumn());
+        name.setCellValueFactory(tickets -> tickets.getValue().getNameProperty());
+/*
+        name.setOnEditCommit(event -> {
+            try {
+                update();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });*/
+        x.setCellFactory(TextFieldTableCell.forTableColumn());
         x.setCellValueFactory(tickets -> tickets.getValue().getCoords().getXProperty().asObject());
         y.setCellValueFactory(tickets -> tickets.getValue().getCoords().getYProperty().asObject());
         creationDate.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
@@ -245,13 +252,14 @@ public class MainController implements Initializable {
         price.setCellValueFactory(new PropertyValueFactory<>("price"));
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
         height.setCellValueFactory(new PropertyValueFactory<>("height"));
-       // xPl.setCellValueFactory(new PropertyValueFactory<>("xPl"));
+        // xPl.setCellValueFactory(new PropertyValueFactory<>("xPl"));
         xPl.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getXProperty().asObject());
         yPl.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getYProperty().asObject());
         zPl.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getZProperty().asObject());
+        place.setCellFactory(TextFieldTableCell.forTableColumn());
         place.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getPlaceProperty());
         user.setCellValueFactory(new PropertyValueFactory<>("user"));
-      //  LocalCollection.setTickets(id, name, x, y, creationDate, price, type, );
+        //  LocalCollection.setTickets(id, name, x, y, creationDate, price, type, );
         updateTable();
     }
 
@@ -276,29 +284,75 @@ public class MainController implements Initializable {
         SortedList<Ticket> sorted = new SortedList<>(filtered);
         sorted.comparatorProperty().bind(tickets.comparatorProperty());
         tickets.setItems(sorted);
+        //  tickets.setItems(LocalCollection.getTickets());
     }
+    private void setUpTimer() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+            try {
+                getCollection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            updateTable();
+            visual();
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+    private void getTableDoubleClick() {
+        tickets.setRowFactory(tv -> {
+            TableRow<Ticket> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    if ((!row.isEmpty())) {
+                        Ticket selected = row.getItem();/*
+                        AbstractCommand update = new Update();
+                        update.setArgs(String.valueOf(selectedMarine.getId()));
+                        update = getCommandWithObject(update, currentBundle.getString("update"), selectedMarine);*/
+                        String com[] = new String[2];
+                        com[0] = "update";
+                        com[1] = String.valueOf(selected.getId());
+                        ci.execute(com, in, selected);
+                  /*      if (update != null) sendPreparedCommand(update);
+                    } else {
+                        logger.debug("Добавляем новый элемент");
+                        sendPreparedCommand(getCommandWithObject(new Add(), currentBundle.getString("add"), null));
+                    }*/
+                    }
+                }
+            });
+            return row;
+        });
+    }
+
+
 
     public void getCollection() throws IOException, ClassNotFoundException, InterruptedException {
         client.writeCommand(new ReadCommand("show", null, null, client.getLogin(), client.getPassword()));
         Thread.sleep(1500);
         arrTic = client.getMessage().getTickets();
-        System.out.println(arrTic.toString());
+        // System.out.println(arrTic.toString());
         lc.setTickets(arrTic);
     }
 
 
     public void help(){
         nowCom[0] = "help";
-        ci.execute(nowCom, in);
-        textRes.setText(currentBundle.getString(cr.getAnswer()));
+        ci.execute(nowCom, in, null);
+        // System.out.println(cr.getAnswer());
+        //  textRes.setText(currentBundle.getString("helpStr"));
     }
     public void count_greater_than_price() throws IOException {
         nowCom[0]="count_greater_than_price";
         nowCom[1]=getArg();
         checkArg(nowCom[1]);
-        //showArgWindow(command, arg);
-        cr.count_greater_than_price(nowCom);
-        textRes.setText(cr.getAnswer());
+        ci.execute(nowCom, in, null);
+        //  cr.count_greater_than_price(nowCom);
+        //textRes.setText(cr.getAnswer());
     }
     public void remove_greater() throws InterruptedException, IOException, ClassNotFoundException {
         nowCom[0]="remove_greater";
@@ -313,23 +367,27 @@ public class MainController implements Initializable {
             showAlert(Alert.AlertType.INFORMATION, "Error", "Enter arg");
         }
         t.setUser(client.getLogin());
-        cr.remove_greater(nowCom, t, in);
-        textRes.setText(currentBundle.getString(cr.getAnswer()));
+        ci.execute(nowCom, in, t);
+        //  cr.remove_greater(nowCom, t, in);
+        //textRes.setText(currentBundle.getString(cr.getAnswer()));
     }
     public void execute_script(){
-       // cr.ex();
-        textRes.setText(cr.getAnswer());
+        String[] s = new String[2];
+        s[0] = "execute_script";
+        s[1] = "script.txt";
+        ci.execute(s, in, null);
+        // textRes.setText(cr.getAnswer());
     }
     public void history(){
         nowCom[0] = "history";
-        ci.execute(nowCom, in);
-        textRes.setText(cr.getAnswer());
+        ci.execute(nowCom, in, null);
+        //   textRes.setText(cr.getAnswer());
     }
 
     public void info() {
         nowCom[0] = "info";
-        ci.execute(nowCom, in);
-        textRes.setText(cr.getAnswer());
+        ci.execute(nowCom, in, null);
+        //   textRes.setText(cr.getAnswer());
     }
     public void insert() throws InterruptedException, IOException, ClassNotFoundException {
         nowCom[0]="insert";
@@ -344,24 +402,25 @@ public class MainController implements Initializable {
             showAlert(Alert.AlertType.INFORMATION, "Error", "Enter arg");
         }
         t.setUser(client.getLogin());
-        cr.insert(nowCom, t);
-        textRes.setText(currentBundle.getString(cr.getAnswer()));
+        ci.execute(nowCom, in, t);
+        //    cr.insert(nowCom, t, in);
+        //   textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
         visual();
     }
     public void min_by_creation_date() throws InterruptedException, IOException, ClassNotFoundException {
         nowCom[0] = "min_by_creation_date";
-        ci.execute(nowCom, in);
-        textRes.setText(cr.getAnswer());
+        ci.execute(nowCom, in, null);
+        //   textRes.setText(cr.getAnswer());
     }
     public void remove_key() throws IOException, InterruptedException, ClassNotFoundException {
         nowCom[0]="remove_key";
         nowCom[1]=getArg();
         checkArg(nowCom[1]);
-        cr.remove(nowCom);
-        getCollection();
-        textRes.setText(currentBundle.getString(cr.getAnswer()));
+        ci.execute(nowCom, in, null);
+        //  cr.remove(nowCom);
+        //   textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
         visual();
@@ -374,8 +433,9 @@ public class MainController implements Initializable {
         t = enterTic();
         t.setId(Long.parseLong(nowCom[1]));
         t.setUser(client.getLogin());
-        cr.replace_if_greater(nowCom, t, in);
-        textRes.setText(currentBundle.getString(cr.getAnswer()));
+        ci.execute(nowCom, in, t);
+        // cr.replace_if_greater(nowCom, t, in);
+        //     textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
     }
@@ -387,14 +447,15 @@ public class MainController implements Initializable {
         t = enterTic();
         t.setId(Long.parseLong(nowCom[1]));
         t.setUser(client.getLogin());
-        cr.update(nowCom, t, in);
-        textRes.setText(currentBundle.getString(cr.getAnswer()));
+        ci.execute(nowCom, in, t);
+        //  cr.update(nowCom, t, in);
+        //     textRes.setText(currentBundle.getString(cr.getAnswer()));
     }
 
     public void clear() throws InterruptedException, IOException, ClassNotFoundException {
         nowCom[0] = "clear";
-        ci.execute(nowCom, in);
-        textRes.setText(currentBundle.getString(cr.getAnswer()));
+        ci.execute(nowCom, in, null);
+        //     textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
     }
@@ -402,36 +463,35 @@ public class MainController implements Initializable {
     public void setCommands(){
         ci = new CommandInvoker();
 
-            cr = new CommandReceiver(ci, client.getChannel(), client.getLogin(), client.getPassword());
-            Command clear = new Clear(cr);
-            Command cgtp = new CountGreaterThanPrice(cr);
-            Command es = new ExecuteScript(cr);
-            Command help = new Help(cr);
-            Command history = new History(cr);
-            Command info = new Info(cr);
-            Command insert = new Insert(cr);
-            Command mbcd = new MinByCreationDate(cr);
-            Command pd = new PrintDescending(cr);
-            Command remove = new Remove(cr);
-            Command rg = new RemoveGreater(cr);
-            Command rig = new ReplaceIfGreater(cr);
-            Command update = new Update(cr);
-            Command exit = new Exit(cr);
+        cr = new CommandReceiver(ci, client.getChannel(), client.getLogin(), client.getPassword());
+        cr.setMainController(this);
+        Command clear = new Clear(cr);
+        Command cgtp = new CountGreaterThanPrice(cr);
+        Command es = new ExecuteScript(cr);
+        Command help = new Help(cr);
+        Command history = new History(cr);
+        Command info = new Info(cr);
+        Command insert = new Insert(cr);
+        Command mbcd = new MinByCreationDate(cr);
+        Command remove = new Remove(cr);
+        Command rg = new RemoveGreater(cr);
+        Command rig = new ReplaceIfGreater(cr);
+        Command update = new Update(cr);
+        Command exit = new Exit(cr);
 
-            ci.addCom("clear", clear);
-            ci.addCom("count_greater_than_price", cgtp);
-            ci.addCom("execute_script", es);
-            ci.addCom("help", help);
-            ci.addCom("history", history);
-            ci.addCom("info", info);
-            ci.addCom("insert", insert);
-            ci.addCom("min_by_creation_date", mbcd);
-            ci.addCom("print_descending", pd);
-            ci.addCom("remove_key", remove);
-            ci.addCom("remove_greater", rg);
-            ci.addCom("replace_if_greater", rig);
-            ci.addCom("update", update);
-            ci.addCom("exit", exit);
+        ci.addCom("clear", clear);
+        ci.addCom("count_greater_than_price", cgtp);
+        ci.addCom("execute_script", es);
+        ci.addCom("help", help);
+        ci.addCom("history", history);
+        ci.addCom("info", info);
+        ci.addCom("insert", insert);
+        ci.addCom("min_by_creation_date", mbcd);
+        ci.addCom("remove_key", remove);
+        ci.addCom("remove_greater", rg);
+        ci.addCom("replace_if_greater", rig);
+        ci.addCom("update", update);
+        ci.addCom("exit", exit);
     }
 
     public String getArg(){
@@ -448,7 +508,7 @@ public class MainController implements Initializable {
             Ticket tic = new Ticket();
             String fxmlFile = "/RegistWindow/enterTic.fxml";
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-           // fxmlLoader.setResources(currentBundle);
+            // fxmlLoader.setResources(currentBundle);
             Parent root = fxmlLoader.load();
             enterTicController enterTicController = fxmlLoader.getController();
             enterTicController.setCurrentBundle(currentBundle);
@@ -483,7 +543,7 @@ public class MainController implements Initializable {
             //showAlert(Alert.AlertType.ERROR, currentBundle.getString("Error"), currentBundle.getString("IOException") + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-           // showAlert(Alert.AlertType.ERROR, currentBundle.getString("Error"), currentBundle.getString("UnexpectedException") + e.getMessage());
+            // showAlert(Alert.AlertType.ERROR, currentBundle.getString("Error"), currentBundle.getString("UnexpectedException") + e.getMessage());
         }
         return null;
     }
@@ -501,7 +561,7 @@ public class MainController implements Initializable {
         all.addAll(LocalCollection.getArrList());
 
         for (Ticket tic : all) {
-          //  newTic(tic);
+            //  newTic(tic);
             if (!LocalCollection.getType().containsKey(tic.getUser()))
                 LocalCollection.getType().put(tic.getUser(), javafx.scene.paint.Color.color(Math.random(), Math.random(), Math.random()));
             double size = tic.getPrice()/3;
@@ -520,17 +580,18 @@ public class MainController implements Initializable {
             ellipse.setLayoutY(tic.getY()+drawing.getHeight()/250);*/
             ellipse.setFill(LocalCollection.getType().get(tic.getUser()));
 
+            TranslateTransition tt = new TranslateTransition(Duration.millis(3100), ellipse);
+            tt.setAutoReverse(true);
+            tt.setFromX(drawing.getLayoutX());
+            tt.setFromY(drawing.getLayoutY());
+            tt.setToY(ellipse.getCenterX());
+            tt.setToY(ellipse.getCenterY());
+            tt.setCycleCount(Animation.INDEFINITE);
+            tt.setInterpolator(Interpolator.LINEAR);
+            //tt.setToY(drawing.getHeight()-tic.getCoords().getY());
+            tt.play();
             if (appear.contains(tic)) {
-                TranslateTransition tt = new TranslateTransition(Duration.millis(3100), ellipse);
-                tt.setAutoReverse(true);
-                tt.setFromX(drawing.getLayoutX());
-                tt.setFromY(drawing.getLayoutY());
-                tt.setToY(ellipse.getCenterX());
-                tt.setToY(ellipse.getCenterY());
-                tt.setCycleCount(Animation.INDEFINITE);
-                tt.setInterpolator(Interpolator.LINEAR);
-                //tt.setToY(drawing.getHeight()-tic.getCoords().getY());
-                tt.play();
+                // tt.play();
                 FadeTransition st = new FadeTransition(Duration.millis(3100), ellipse);
                 st.setFromValue(0);
                 st.setToValue(1);
@@ -645,8 +706,8 @@ public class MainController implements Initializable {
         crDateFilter.setPromptText(getCurrentBundle().getString("creationDate"));
         typeFilter.setPromptText(getCurrentBundle().getString("type"));
         heightFilter.setPromptText(getCurrentBundle().getString("height"));
+        count_greater_than_price.setText(getCurrentBundle().getString("cgtp"));
     }
-
    /* private void newTic(Ticket tic) {
 
         if (!LocalCollection.getType().containsKey(tic.getUser()))

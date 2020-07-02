@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.util.Scanner;
 
 /**
@@ -21,7 +23,7 @@ public class ExecuteScript extends Command {
     }
 
     @Override
-    protected void execute(String[] args, Scanner in) {
+    protected void execute(String[] args, Scanner in, Ticket t) {
         if (args.length > 1) {
             commandReceiver.execute_script(args[1]);
         }else {

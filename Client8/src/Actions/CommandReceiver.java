@@ -15,12 +15,17 @@ import java.util.*;
 
 public class CommandReceiver{
     private final CommandInvoker commandInvoker;
-   // private Enter e = new Enter();
+    private Enter e = new Enter();
     private SocketChannel channel;
     int delay = 1500;
     private String login;
     private String pas;
     String answer;
+    MainController mainController;
+
+    public void setMainController(MainController mainController){
+        this.mainController=mainController;
+    }
 
 
     public CommandReceiver(CommandInvoker commandInvoker, SocketChannel socket, String login, String pas) {
@@ -30,14 +35,15 @@ public class CommandReceiver{
         this.pas = pas;
     }
 
-    public void help() {
+    public void help() {/*
         StringBuilder sb = new StringBuilder();
         commandInvoker.getCommands().forEach((name, command) -> sb.append(command.help()+"\n"));
-        setAnswer(sb.toString());
+        setAnswer(sb.toString());*/
+        mainController.setAnswer("helpStr");
     }
 
     public void history(){
-        setAnswer(CommandInvoker.getHistory().toString());
+        mainController.setNubmerAnswer(CommandInvoker.getHistory().toString());
     }
 
 
@@ -45,7 +51,7 @@ public class CommandReceiver{
         ReadCommand rc = new ReadCommand("clear", null,null, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
-        setAnswer(Client.getMessage().getAnswer());
+        mainController.setAnswer(Client.getMessage().getAnswer());
 
     }
 
@@ -53,22 +59,23 @@ public class CommandReceiver{
         ReadCommand rc = new ReadCommand("info", null,null, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
-        setAnswer(Client.getMessage().getAnswer());
+        mainController.setNubmerAnswer(Client.getMessage().getAnswer());
     }
 
-    public void insert(String[] command, Ticket tic) throws IOException, InterruptedException, ClassNotFoundException {
-       // Ticket tic = e.enter(command, in);
-        try {
+    public void insert(String[] command, Ticket tic, Scanner in) throws IOException, InterruptedException, ClassNotFoundException {
+        if (tic == null) {
+            tic = e.enter(command, in);
+        }        try {
             if (command.length > 1) {
                 ReadCommand rc = new ReadCommand("insert", tic.getId().toString(), tic, login, pas);
                 Client.writeCommand(rc);
                 Thread.sleep(delay);
-                setAnswer(Client.getMessage().getAnswer());
+                mainController.setAnswer(Client.getMessage().getAnswer());
             } else {
-                setAnswer("EnterArg'");
+                mainController.setAnswer("EnterArg'");
             }
         }catch (InputMismatchException | NumberFormatException | ClassNotFoundException | InterruptedException e){
-        setAnswer("Wrongtype");
+        mainController.setAnswer("Wrongtype");
     }
     }
 
@@ -76,14 +83,14 @@ public class CommandReceiver{
         ReadCommand rc = new ReadCommand("min_by_creation_date", null,null,login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
-        setAnswer(Client.getMessage().getAnswer());
+        mainController.setNubmerAnswer(Client.getMessage().getAnswer());
     }
 
     public void print_descending() throws IOException, InterruptedException, ClassNotFoundException {
         ReadCommand rc = new ReadCommand("print_descending", null,null, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
-        setAnswer(Client.getMessage().getAnswer());
+        mainController.setAnswer(Client.getMessage().getAnswer());
     }
 
     public void remove(String[] args) throws IOException {
@@ -93,32 +100,36 @@ public class CommandReceiver{
                 ReadCommand rc = new ReadCommand("remove_key", String.valueOf(id), null, login, pas);
                 Client.writeCommand(rc);
                 Thread.sleep(delay);
-                setAnswer(Client.getMessage().getAnswer());
+                mainController.setAnswer(Client.getMessage().getAnswer());
             } else{
-                setAnswer("EnterArg");
+                mainController.setAnswer("EnterArg");
             }
         }catch (InputMismatchException | NumberFormatException | ClassNotFoundException | InterruptedException e){
-            setAnswer("Wrongtype");
+            mainController.setAnswer("Wrongtype");
         }
     }
 
     public void remove_greater(String[] command, Ticket tic, Scanner in) throws IOException, InterruptedException, ClassNotFoundException {
-     //   Ticket tic = e.enter(command, in);
-        ReadCommand rc = new ReadCommand("remove_greater", null, tic, login, pas);
+        if (tic == null) {
+            tic = e.enter(command, in);
+        }        ReadCommand rc = new ReadCommand("remove_greater", null, tic, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(1500);
-        setAnswer(Client.getMessage().getAnswer());
+       // setAnswer(Client.getMessage().getAnswer());
+        mainController.setAnswer(Client.getMessage().getAnswer());
     }
 
     public void replace_if_greater(String[] command, Ticket tic, Scanner in) throws IOException, ClassNotFoundException, InterruptedException {
         if (command.length > 1) {
-           // Ticket tic = e.enter(command, in);
+            if (tic == null) {
+                tic = e.enter(command, in);
+            }
             ReadCommand rc = new ReadCommand("replace_if_greater", command[1], tic, login, pas);
             Client.writeCommand(rc);
             Thread.sleep(delay);
-            setAnswer(Client.getMessage().getAnswer());
+            mainController.setAnswer(Client.getMessage().getAnswer());
         }else{
-            setAnswer("EnterArg");
+            mainController.setAnswer("EnterArg");
         }
     }
 
@@ -128,9 +139,9 @@ public class CommandReceiver{
         ReadCommand rc = new ReadCommand("update", command[1], tic, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(1500);
-        setAnswer(Client.getMessage().getAnswer());
+        mainController.setAnswer(Client.getMessage().getAnswer());
     }else {
-        setAnswer("EnterArg");
+        mainController.setAnswer("EnterArg");
     }
     }
 
@@ -148,16 +159,16 @@ public class CommandReceiver{
                 ReadCommand rc = new ReadCommand("count_greater_than_price", com[1], null, login, pas);
                 Client.writeCommand(rc);
                 Thread.sleep(delay);
-                setAnswer(Client.getMessage().getAnswer());
+                mainController.setNubmerAnswer(Client.getMessage().getAnswer());
             } else {
-                setAnswer("EnterArg");
+                mainController.setAnswer("EnterArg");
             }
         }catch (InvalidFieldException e) {
-            setAnswer(e.getMessage());
+            mainController.setNubmerAnswer(e.getMessage());
         } catch (InputMismatchException e) {
-            setAnswer("Wrongtype");
+            mainController.setAnswer("Wrongtype");
         } catch (NumberFormatException e) {
-            setAnswer("Wrongtype");
+            mainController.setAnswer("Wrongtype");
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } catch (InterruptedException ex) {
@@ -189,7 +200,7 @@ public class CommandReceiver{
                             line = in2.nextLine();
                             com = line.split(" ");
                             System.out.println(Arrays.toString(com));
-                            commandInvoker.execute(com, in2);
+                            commandInvoker.execute(com, in2, null);
                         }
 
                     }
@@ -198,21 +209,21 @@ public class CommandReceiver{
                 }
 
             } else {
-                setAnswer("You can't read file");
+                mainController.setNubmerAnswer("You can't read file");
             }
 
         } catch (FileNotFoundException e) {
-            setAnswer("This file doesn't exist");
+            mainController.setNubmerAnswer("This file doesn't exist");
         } catch (NullPointerException e) {
-            setAnswer("Unknown command in the script");
+            mainController.setNubmerAnswer("Unknown command in the script");
         } catch (ExecuteScriptException e) {
-            setAnswer("Recursion in the script!");
+            mainController.setNubmerAnswer("Recursion in the script!");
         } catch (InvalidFieldException e) {
-            setAnswer("Invalid field entered in the script ");
+            mainController.setNubmerAnswer("Invalid field entered in the script ");
         } catch (StackOverflowError e) {
-            setAnswer("Recursion happened");
+            mainController.setNubmerAnswer("Recursion happened");
         } catch (Exception e) {
-            setAnswer("Unknown error, aliens have taken over the program");
+            mainController.setNubmerAnswer("Unknown error, aliens have taken over the program");
         }
     }
 

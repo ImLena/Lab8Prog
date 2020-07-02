@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -22,9 +24,9 @@ public class ReplaceIfGreater extends Command {
     }
 
     @Override
-    protected void execute(String[] args, Scanner in) throws IOException, InterruptedException, ClassNotFoundException {
+    protected void execute(String[] args, Scanner in, Ticket t) throws IOException, InterruptedException, ClassNotFoundException {
         if (args.length>1){
-           // commandReceiver.replace_if_greater(args, in);
+            commandReceiver.replace_if_greater(args, t, in);
         }else {
             System.out.println("Enter id after command");
         }

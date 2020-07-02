@@ -1,4 +1,4 @@
-/*
+
 package Actions;
 
 import Collections.*;
@@ -10,20 +10,19 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-*/
+
 /**
  * Класс для реализации ввода данных пользователем
- *//*
+ */
 
 
-public class Enter implements Serializable {*/
-/*
+public class Enter implements Serializable {
+
     private Coordinates coordinates = new Coordinates();
     private Location loc = new Location();
     private Ticket ticket = new Ticket();
     private Person person = new Person();
     private LocalDateTime creationDate = LocalDateTime.now();
-*//*
 
 
     public Enter(){
@@ -271,4 +270,4 @@ public class Enter implements Serializable {*/
         return ticket;
     }
 }
-*/
+

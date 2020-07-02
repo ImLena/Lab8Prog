@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -21,7 +23,7 @@ public class MinByCreationDate extends Command {
         return "min_by_creation_date - show element with minimal creation date";
     }
     @Override
-    protected  void execute(String[] args, Scanner in) throws IOException, ClassNotFoundException, InterruptedException {
+    protected  void execute(String[] args, Scanner in, Ticket t) throws IOException, ClassNotFoundException, InterruptedException {
         commandReceiver.min_by_creation_date();
     }
 }

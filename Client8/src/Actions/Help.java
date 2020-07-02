@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.util.Scanner;
 
 /**
@@ -15,7 +17,7 @@ public class Help extends Command {
     }
 
     @Override
-    protected void execute(String[] args, Scanner in) {
+    protected void execute(String[] args, Scanner in, Ticket t) {
         commandReceiver.help();
     }
 

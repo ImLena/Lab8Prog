@@ -19,6 +19,9 @@ public class Coordinates implements Serializable {
     private static final long serialVersionUID = 32L;
 
 
+    public Coordinates() {
+    }
+
     public Coordinates(Float x, Integer y) {
         this.x = x;
         this.y = y;

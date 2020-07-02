@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -19,7 +21,7 @@ public class Info extends Command {
         return "help - show information about collection";
     }
     @Override
-    protected  void execute (String[] args, Scanner in) throws IOException, InterruptedException, ClassNotFoundException {
+    protected  void execute (String[] args, Scanner in, Ticket t) throws IOException, InterruptedException, ClassNotFoundException {
         commandReceiver.info();
     }
 }

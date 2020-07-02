@@ -82,6 +82,10 @@ public class Location implements Serializable {
             throw new InvalidFieldException("Error in field name (location)");
         }
     }
+
+    public Location() {
+    }
+
     private void checkLocx() {
         if (x == null) {
             throw new InvalidFieldException("Error in field x (location)");

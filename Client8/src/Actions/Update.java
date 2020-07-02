@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -22,7 +24,7 @@ public class Update extends Command {
     }
 
     @Override
-    protected void execute(String[] args, Scanner in) throws IOException {
-           // commandReceiver.update(args, in);
+    protected void execute(String[] args, Scanner in, Ticket t) throws IOException, ClassNotFoundException, InterruptedException {
+            commandReceiver.update(args, t, in);
     }
 }

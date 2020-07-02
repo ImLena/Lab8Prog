@@ -21,6 +21,9 @@ public class Person implements Serializable {
         return location;
     }
 
+    public Person() {
+    }
+
     public Person(double height, Location location) {
         this.height = height;
         this.location = location;
@@ -41,10 +44,6 @@ public class Person implements Serializable {
     public void setHeight(double height) throws InvalidFieldException {
         this.height = height;
         checkHeigh();
-    }
-
-    public Location getLOc() {
-        return location;
     }
 
     public void setLocation(Location location) {

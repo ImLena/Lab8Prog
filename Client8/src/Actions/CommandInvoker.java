@@ -1,7 +1,7 @@
 package Actions;
 
 import MainWindow.MainController;
-import Other.Client;
+import Collections.Ticket;
 
 import java.io.IOException;
 import java.util.*;
@@ -13,10 +13,10 @@ public class CommandInvoker {
     public void addCom(String key, Command com){
         commands.put(key,com);
     }
-        public void execute(String[] commandName, Scanner in) {
+        public void execute(String[] commandName, Scanner in, Ticket t) {
             try {
                 Command command = commands.get(commandName[0]);
-                command.execute(commandName, in);
+                command.execute(commandName, in, t);
                 if (count < 11) {
                     history.offer(commandName[0]);
                     count++;

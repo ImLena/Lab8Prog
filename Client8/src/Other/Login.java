@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class Login {
     public static ReadCommand rc;
     public static String registerUser(SocketChannel channel, String[] command) throws InterruptedException, IOException, ClassNotFoundException {
-        System.out.println(command.toString());
         String s = null;
         rc = new ReadCommand(command[0], null, null, command[1], command[2]);
         Client.writeCommand(rc);
@@ -19,7 +18,6 @@ public class Login {
         Answer a = Client.getMessage();
         String answer = a.getAnswer();
         String[] answ = answer.split(" ");
-        System.out.println(answ.toString() + " anssss");
         if (answ.length == 2) {
             if (answ[0].equals("user")) {
                 if (answ[1].equals("logged") | answ[1].equals("registered")) {

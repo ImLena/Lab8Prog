@@ -1,5 +1,7 @@
 package Actions;
 
+import Collections.Ticket;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -20,7 +22,7 @@ public class CountGreaterThanPrice extends Command {
        return "count_greater_than_price price - enter number of elements with price more than entered ";
     }
     @Override
-    protected void execute(String[] args, Scanner in) throws IOException {
+    protected void execute(String[] args, Scanner in, Ticket t) throws IOException {
         commandReceiver.count_greater_than_price(args);
 
         }
