@@ -38,6 +38,7 @@ public class RemoveGreater extends Command{
                 return new Answer("Ticket expected", null);
             }
         } catch (NumberFormatException | SQLException e) {
+            e.printStackTrace();
             return new Answer("wrongKey", null);
         }
     }

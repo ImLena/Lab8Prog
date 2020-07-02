@@ -140,7 +140,7 @@ public class TicketsDB {
                 System.out.println("updating...");
                 if (!rs.getString("username").equals(tic.getUser()))
                     throw new SQLException("Object with id = " + id + " belongs to another user, you can't change it.");
-                System.out.println("correct user");
+                //System.out.println("correct user");
                 remove(rs.getLong("id"), tic.getUser());
                 insert(tic);
             }
