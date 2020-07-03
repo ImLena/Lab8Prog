@@ -7,7 +7,6 @@ import Other.ReadCommand;
 import RegistWindow.RegWindow;
 import RegistWindow.enterTicController;
 import javafx.animation.*;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -32,11 +31,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.util.Duration;
-import sun.jvm.hotspot.oops.FloatField;
+import javafx.util.converter.FloatStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LongStringConverter;
 
 
 import java.io.*;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -224,10 +226,12 @@ public class MainController implements Initializable {
 
     private void fillTable() {
         tickets.setEditable(true);
+
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
 //        name.setCellValueFactory(new PropertyValueFactory<>("name"));
         name.setCellFactory(TextFieldTableCell.forTableColumn());
         name.setCellValueFactory(tickets -> tickets.getValue().getNameProperty());
+        name.setOnEditCommit(event -> getTableDoubleClick());
 /*
         name.setOnEditCommit(event -> {
             try {
@@ -240,19 +244,27 @@ public class MainController implements Initializable {
                 e.printStackTrace();
             }
         });*/
-        x.setCellFactory(TextFieldTableCell.forTableColumn());
+        x.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
         x.setCellValueFactory(tickets -> tickets.getValue().getCoords().getXProperty().asObject());
+        y.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
         y.setCellValueFactory(tickets -> tickets.getValue().getCoords().getYProperty().asObject());
         creationDate.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
 
+        price.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
 
-        //   x.setCellValueFactory(new PropertyValueFactory<>("x"));
-       /* y.setCellValueFactory(new PropertyValueFactory<>("y"));
-        creationDate.setCellValueFactory(new PropertyValueFactory<>("creationDate"));*/
-        price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        price.setCellValueFactory(tickets -> tickets.getValue().getPriceProperty().asObject());
+     //   price.setOnEditCommit(event -> getTableDoubleClick());
+
+       // type.setCellFactory(TextFieldTableCell.forTableColumn());
+
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
-        height.setCellValueFactory(new PropertyValueFactory<>("height"));
+        height.setCellValueFactory(tickets -> tickets.getValue().getPerson().getHeightProperty().asObject());
         // xPl.setCellValueFactory(new PropertyValueFactory<>("xPl"));
+        xPl.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
+        yPl.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
+        zPl.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
+
         xPl.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getXProperty().asObject());
         yPl.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getYProperty().asObject());
         zPl.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getZProperty().asObject());
@@ -287,7 +299,7 @@ public class MainController implements Initializable {
         //  tickets.setItems(LocalCollection.getTickets());
     }
     private void setUpTimer() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(8), ev -> {
             try {
                 getCollection();
             } catch (IOException e) {
@@ -303,28 +315,24 @@ public class MainController implements Initializable {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
+    /*private void getData(){
+        Ticket t=new Ticket();
+        Coordinates coordinates = new Coordinates(Float.valueOf(x.getText()), Integer.valueOf(y.getText()));
+        Location location = new Location(Long.valueOf(xPl.getText()), Float.valueOf(yPl.getText()), Float.valueOf(zPl.getText()), place.getText());
+        Person person = new Person(Double.valueOf(height.getText()), location);
+        t.setId(Long.valueOf(id));
+
+    }*/
     private void getTableDoubleClick() {
         tickets.setRowFactory(tv -> {
             TableRow<Ticket> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2) {
                     if ((!row.isEmpty())) {
-                        Ticket selected = row.getItem();/*
-                        AbstractCommand update = new Update();
-                        update.setArgs(String.valueOf(selectedMarine.getId()));
-                        update = getCommandWithObject(update, currentBundle.getString("update"), selectedMarine);*/
+                        Ticket selected = row.getItem();
                         String com[] = new String[2];
                         com[0] = "update";
                         com[1] = String.valueOf(selected.getId());
                         ci.execute(com, in, selected);
-                  /*      if (update != null) sendPreparedCommand(update);
-                    } else {
-                        logger.debug("Добавляем новый элемент");
-                        sendPreparedCommand(getCommandWithObject(new Add(), currentBundle.getString("add"), null));
-                    }*/
                     }
-                }
-            });
             return row;
         });
     }
@@ -708,25 +716,5 @@ public class MainController implements Initializable {
         heightFilter.setPromptText(getCurrentBundle().getString("height"));
         count_greater_than_price.setText(getCurrentBundle().getString("cgtp"));
     }
-   /* private void newTic(Ticket tic) {
 
-        if (!LocalCollection.getType().containsKey(tic.getUser()))
-            LocalCollection.getType().put(tic.getUser(), javafx.scene.paint.Color.color(Math.random(), Math.random(), Math.random()));
-        float size = tic.getPrice()/10;
-        if (size>40){
-            size=40;
-        }
-        Rectangle rectangle = new Rectangle();
-        rectangle.setWidth(size);
-        rectangle.setHeight(size/3);
-        rectangle.setLayoutX(tic.getX()+pane.getMaxWidth()/300);
-        rectangle.setLayoutY(tic.getY()+pane.getHeight()/250);
-        rectangle.setFill(LocalCollection.getType().get(tic.getUser()));
-        rectangle.setOnMouseClicked(mouseEvent -> {
-            textArea.setText(tic.toString());
-            people.getSelectionModel().select(person);
-        }););
-        circleSpaceMarineHashMap.put(circle, spaceMarine);
-        pane.getChildren().add(circle);
-    }*/
 }
