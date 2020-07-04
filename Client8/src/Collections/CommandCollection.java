@@ -17,7 +17,6 @@ public class CommandCollection implements Serializable {
         Command info = new Info(cr);
         Command insert = new Insert(cr);
         Command mbcd = new MinByCreationDate(cr);
-        Command pd = new PrintDescending(cr);
         Command remove = new Remove(cr);
         Command rg = new RemoveGreater(cr);
         Command rig = new ReplaceIfGreater(cr);
@@ -31,7 +30,6 @@ public class CommandCollection implements Serializable {
         commands.put("info", info);
         commands.put("insert", insert);
         commands.put("min_by_creation_date", mbcd);
-        commands.put("print_descending", pd);
         commands.put("remove_key", remove);
         commands.put("remove_greater", rg);
         commands.put("replace_if_greater", rig);

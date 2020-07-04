@@ -8,6 +8,7 @@ import RegistWindow.RegWindow;
 import RegistWindow.enterTicController;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -24,21 +25,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LongStringConverter;
 
-
 import java.io.*;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -102,7 +105,7 @@ public class MainController implements Initializable {
     @FXML
     TableColumn<Ticket, Integer> y;
     @FXML
-    TableColumn<Ticket, String> creationDate;
+    TableColumn<Ticket, LocalDateTime> creationDate;
     @FXML
     TableColumn<Ticket, Float> price;
     @FXML
@@ -156,7 +159,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            currentBundle = ResourceBundle.getBundle("bundles/bundles", new Locale("ru"));
+            currentBundle = ResourceBundle.getBundle("bundles/bundles", new Locale("en"));
             ObservableList<String> languages = FXCollections.observableArrayList("en_CA","ru", "is","pl");
             lang.getItems().addAll(languages);
             client = new Client(this);
@@ -186,7 +189,8 @@ public class MainController implements Initializable {
                 getCollection();
                 fillTable();
                 visual();
-                getTableDoubleClick();setUpTimer();
+                getTableDoubleClick();
+                setUpTimer();
 
             }
         } catch (IOException e) {
@@ -228,11 +232,41 @@ public class MainController implements Initializable {
         tickets.setEditable(true);
 
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+       name.setCellValueFactory(new PropertyValueFactory<>("name"));
         name.setCellFactory(TextFieldTableCell.forTableColumn());
-        name.setCellValueFactory(tickets -> tickets.getValue().getNameProperty());
-        name.setOnEditCommit(event -> getTableDoubleClick());
-/*
+      //  name.addEventHandler(name.setOnEditCommit() -> updateByCell());
+ //       name.setCellValueFactory(tickets -> tickets.getValue().getNameProperty());
+     //   name.setOnEditCommit(event -> getTableDoubleClick());
+        name.cellFactoryProperty().addListener((observable, oldValue, newValue) -> updateByCell());
+       /* Callback<TableColumn<Ticket, String>, TableCell<Ticket, String>> cellFactory = new Callback<TableColumn<Ticket, String>, TableCell<Ticket, String>>() {
+            @Override
+            public TableCell<Ticket, String> call(final TableColumn<Ticket, String> param) {
+                final TableCell<Ticket, String> cell = new TableCell<Ticket, String>() {
+
+                    private final Button btn = new Button("Action");
+
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            Data data = getTableView().getItems().get(getIndex());
+                            System.out.println("selectedData: " + data);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };*/
+        //name.textProperty().addListener(event -> getTableDoubleClick());
+                /*
         name.setOnEditCommit(event -> {
             try {
                 update();
@@ -296,11 +330,13 @@ public class MainController implements Initializable {
         SortedList<Ticket> sorted = new SortedList<>(filtered);
         sorted.comparatorProperty().bind(tickets.comparatorProperty());
         tickets.setItems(sorted);
+       // filtered.addListener(new ListChangeListener<Ticket> list);
         //  tickets.setItems(LocalCollection.getTickets());
     }
     private void setUpTimer() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(8), ev -> {
             try {
+
                 getCollection();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -323,16 +359,36 @@ public class MainController implements Initializable {
         t.setId(Long.valueOf(id));
 
     }*/
-    private void getTableDoubleClick() {
+    private void updateByCell(){
+
         tickets.setRowFactory(tv -> {
             TableRow<Ticket> row = new TableRow<>();
-                    if ((!row.isEmpty())) {
-                        Ticket selected = row.getItem();
+            if ((!row.isEmpty())) {
+                Ticket selected = row.getItem();
+                arg.setText(String.valueOf(selected.getId()));
                         String com[] = new String[2];
                         com[0] = "update";
                         com[1] = String.valueOf(selected.getId());
                         ci.execute(com, in, selected);
+            }
+            return row;
+        });
+    }
+    private void getTableDoubleClick() {
+        tickets.setRowFactory(tv -> {
+            TableRow<Ticket> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    if ((!row.isEmpty())) {
+                        Ticket selected = row.getItem();
+                        arg.setText(String.valueOf(selected.getId()));/*
+                        String com[] = new String[2];
+                        com[0] = "update";
+                        com[1] = String.valueOf(selected.getId());
+                        ci.execute(com, in, selected);*/
                     }
+                }
+            });
             return row;
         });
     }
@@ -344,7 +400,7 @@ public class MainController implements Initializable {
         Thread.sleep(1500);
         arrTic = client.getMessage().getTickets();
         // System.out.println(arrTic.toString());
-        lc.setTickets(arrTic);
+        LocalCollection.setTickets(arrTic);
     }
 
 
@@ -409,6 +465,8 @@ public class MainController implements Initializable {
         }catch (NullPointerException e){
             showAlert(Alert.AlertType.INFORMATION, "Error", "Enter arg");
         }
+        //t.setCreationDate(toLocalDateTime());
+        t.setCreationDate(LocalDateTime.now());
         t.setUser(client.getLogin());
         ci.execute(nowCom, in, t);
         //    cr.insert(nowCom, t, in);
@@ -453,6 +511,7 @@ public class MainController implements Initializable {
         checkArg(nowCom[1]);
         Ticket t = new Ticket();
         t = enterTic();
+        t.setCreationDate(toLocalDateTime());
         t.setId(Long.parseLong(nowCom[1]));
         t.setUser(client.getLogin());
         ci.execute(nowCom, in, t);
@@ -705,6 +764,7 @@ public class MainController implements Initializable {
         update.setText(getCurrentBundle().getString("update"));
         height.setText(getCurrentBundle().getString("height"));
         argument.setText(getCurrentBundle().getString("arg"));
+        remove_key.setText(getCurrentBundle().getString("remove_key"));
         priceFilter.setPromptText((getCurrentBundle().getString("price")));
         placeFilter.setPromptText(getCurrentBundle().getString("place"));
         xPlFilter.setPromptText(getCurrentBundle().getString("xPl"));
@@ -715,6 +775,29 @@ public class MainController implements Initializable {
         typeFilter.setPromptText(getCurrentBundle().getString("type"));
         heightFilter.setPromptText(getCurrentBundle().getString("height"));
         count_greater_than_price.setText(getCurrentBundle().getString("cgtp"));
+        userFilter.setPromptText(getCurrentBundle().getString("user"));
+    }
+    public LocalDateTime toLocalDateTime(){
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withLocale(getCurrentBundle().getLocale());
+        String ld = LocalDateTime.now().format(formatter);
+        //ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.now(), setZone());
+        LocalDateTime dt = LocalDateTime.ofInstant(Instant.now(), setZone());//*.currentBundle.getLocale())parse(ld, formatter*/);
+        return dt;
+    }
+    private ZoneId setZone(){
+        System.out.println(currentBundle.getLocale().getDisplayLanguage());
+        switch (currentBundle.getLocale().getDisplayLanguage()){
+            case "английский":
+                return ZoneId.of("Canada/Yukon");
+            case "русский":
+                return ZoneId.of("Europe/Moscow");
+            case "исландский":
+                return ZoneId.of("Atlantic/Reykjavik");
+            case "польский":
+                return ZoneId.of("Europe/Warsaw");
+        }
+        return null;
+
     }
 
 }

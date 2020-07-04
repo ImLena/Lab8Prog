@@ -1,14 +1,11 @@
 package Collections;
 
 import Exceptions.InvalidFieldException;
+import MainWindow.MainController;
 import javafx.beans.property.*;
-import javafx.util.Builder;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.zip.InflaterInputStream;
 
 /**
  * Класс для заполнения полей ticket
@@ -205,6 +202,10 @@ public class Ticket implements Comparable, Serializable {
         }
     }
 
+    public FloatProperty getPriceProperty() {
+        return new SimpleFloatProperty(price);
+    }
+
     public static class CreateTicket {
         private String user;
         private Long id;
@@ -271,25 +272,13 @@ public class Ticket implements Comparable, Serializable {
             return this;
         }
 
-        public CreateTicket xPl(Long xPl) {
-            this.xPl = xPl;
-            return this;
-        }
+
         public StringProperty getNameProperty() {
             return new SimpleStringProperty(name);
         }
-
-
-        public CreateTicket yPl(Float yPl) {
-            this.yPl = yPl;
-            return this;
+        public FloatProperty getPriceProperty() {
+            return new SimpleFloatProperty(price);
         }
-
-        public CreateTicket zPl(Float zPl) {
-            this.zPl = zPl;
-            return this;
-        }
-
         public CreateTicket place(String place) {
             this.place = place;
             return this;
