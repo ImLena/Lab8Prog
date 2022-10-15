@@ -1,4 +1,5 @@
 package Actions;
+
 import Collections.Ticket;
 import Exceptions.ExecuteScriptException;
 import Exceptions.InvalidFieldException;
@@ -13,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class CommandReceiver{
+public class CommandReceiver {
     private final CommandInvoker commandInvoker;
     private Enter e = new Enter();
     private SocketChannel channel;
@@ -23,8 +24,8 @@ public class CommandReceiver{
     String answer;
     MainController mainController;
 
-    public void setMainController(MainController mainController){
-        this.mainController=mainController;
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 
 
@@ -35,20 +36,17 @@ public class CommandReceiver{
         this.pas = pas;
     }
 
-    public void help() {/*
-        StringBuilder sb = new StringBuilder();
-        commandInvoker.getCommands().forEach((name, command) -> sb.append(command.help()+"\n"));
-        setAnswer(sb.toString());*/
+    public void help() {
         mainController.setAnswer("helpStr");
     }
 
-    public void history(){
+    public void history() {
         mainController.setNubmerAnswer(CommandInvoker.getHistory().toString());
     }
 
 
     public void clear() throws IOException, ClassNotFoundException, InterruptedException {
-        ReadCommand rc = new ReadCommand("clear", null,null, login, pas);
+        ReadCommand rc = new ReadCommand("clear", null, null, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
         mainController.setAnswer(Client.getMessage().getAnswer());
@@ -56,7 +54,7 @@ public class CommandReceiver{
     }
 
     public void info() throws IOException, ClassNotFoundException, InterruptedException {
-        ReadCommand rc = new ReadCommand("info", null,null, login, pas);
+        ReadCommand rc = new ReadCommand("info", null, null, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
         mainController.setNubmerAnswer(Client.getMessage().getAnswer());
@@ -65,7 +63,8 @@ public class CommandReceiver{
     public void insert(String[] command, Ticket tic, Scanner in) throws IOException, InterruptedException, ClassNotFoundException {
         if (tic == null) {
             tic = e.enter(command, in);
-        }        try {
+        }
+        try {
             if (command.length > 1) {
                 ReadCommand rc = new ReadCommand("insert", tic.getId().toString(), tic, login, pas);
                 Client.writeCommand(rc);
@@ -74,37 +73,37 @@ public class CommandReceiver{
             } else {
                 mainController.setAnswer("EnterArg'");
             }
-        }catch (InputMismatchException | NumberFormatException | ClassNotFoundException | InterruptedException e){
-        mainController.setAnswer("Wrongtype");
-    }
+        } catch (InputMismatchException | NumberFormatException | ClassNotFoundException | InterruptedException e) {
+            mainController.setAnswer("Wrongtype");
+        }
     }
 
     public void min_by_creation_date() throws IOException, InterruptedException, ClassNotFoundException {
-        ReadCommand rc = new ReadCommand("min_by_creation_date", null,null,login, pas);
+        ReadCommand rc = new ReadCommand("min_by_creation_date", null, null, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
         mainController.setNubmerAnswer(Client.getMessage().getAnswer());
     }
 
     public void print_descending() throws IOException, InterruptedException, ClassNotFoundException {
-        ReadCommand rc = new ReadCommand("print_descending", null,null, login, pas);
+        ReadCommand rc = new ReadCommand("print_descending", null, null, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(delay);
         mainController.setAnswer(Client.getMessage().getAnswer());
     }
 
     public void remove(String[] args) throws IOException {
-        try{
+        try {
             if (args.length > 1) {
                 Long id = Long.valueOf(args[1]);
                 ReadCommand rc = new ReadCommand("remove_key", String.valueOf(id), null, login, pas);
                 Client.writeCommand(rc);
                 Thread.sleep(delay);
                 mainController.setAnswer(Client.getMessage().getAnswer());
-            } else{
+            } else {
                 mainController.setAnswer("EnterArg");
             }
-        }catch (InputMismatchException | NumberFormatException | ClassNotFoundException | InterruptedException e){
+        } catch (InputMismatchException | NumberFormatException | ClassNotFoundException | InterruptedException e) {
             mainController.setAnswer("Wrongtype");
         }
     }
@@ -112,10 +111,11 @@ public class CommandReceiver{
     public void remove_greater(String[] command, Ticket tic, Scanner in) throws IOException, InterruptedException, ClassNotFoundException {
         if (tic == null) {
             tic = e.enter(command, in);
-        }        ReadCommand rc = new ReadCommand("remove_greater", null, tic, login, pas);
+        }
+        ReadCommand rc = new ReadCommand("remove_greater", null, tic, login, pas);
         Client.writeCommand(rc);
         Thread.sleep(1500);
-       // setAnswer(Client.getMessage().getAnswer());
+        // setAnswer(Client.getMessage().getAnswer());
         mainController.setAnswer(Client.getMessage().getAnswer());
     }
 
@@ -128,21 +128,20 @@ public class CommandReceiver{
             Client.writeCommand(rc);
             Thread.sleep(delay);
             mainController.setAnswer(Client.getMessage().getAnswer());
-        }else{
+        } else {
             mainController.setAnswer("EnterArg");
         }
     }
 
     public void update(String[] command, Ticket tic, Scanner in) throws IOException, InterruptedException, ClassNotFoundException {
-        if (command.length>1){
-       // Ticket tic = e.enter(command, in);
-        ReadCommand rc = new ReadCommand("update", command[1], tic, login, pas);
-        Client.writeCommand(rc);
-        Thread.sleep(1500);
-        mainController.setAnswer(Client.getMessage().getAnswer());
-    }else {
-        mainController.setAnswer("EnterArg");
-    }
+        if (command.length > 1) {
+            ReadCommand rc = new ReadCommand("update", command[1], tic, login, pas);
+            Client.writeCommand(rc);
+            Thread.sleep(1500);
+            mainController.setAnswer(Client.getMessage().getAnswer());
+        } else {
+            mainController.setAnswer("EnterArg");
+        }
     }
 
     public ArrayList<Ticket> show() throws IOException, ClassNotFoundException, InterruptedException {
@@ -155,7 +154,6 @@ public class CommandReceiver{
     public void count_greater_than_price(String[] com) throws IOException {
         try {
             if (com.length > 1) {
-                float price = Float.parseFloat(com[1]);
                 ReadCommand rc = new ReadCommand("count_greater_than_price", com[1], null, login, pas);
                 Client.writeCommand(rc);
                 Thread.sleep(delay);
@@ -163,15 +161,11 @@ public class CommandReceiver{
             } else {
                 mainController.setAnswer("EnterArg");
             }
-        }catch (InvalidFieldException e) {
+        } catch (InvalidFieldException e) {
             mainController.setNubmerAnswer(e.getMessage());
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NumberFormatException e) {
             mainController.setAnswer("Wrongtype");
-        } catch (NumberFormatException e) {
-            mainController.setAnswer("Wrongtype");
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (InterruptedException ex) {
+        } catch (ClassNotFoundException | InterruptedException ex) {
             ex.printStackTrace();
         }
     }

@@ -18,12 +18,14 @@ public class MinByCreationDate extends Command {
 
         this.commandReceiver = commandReceiver;
     }
+
     @Override
-    protected  String help(){
+    protected String help() {
         return "min_by_creation_date - show element with minimal creation date";
     }
+
     @Override
-    protected  void execute(String[] args, Scanner in, Ticket t) throws IOException, ClassNotFoundException, InterruptedException {
+    protected void execute(String[] args, Scanner in, Ticket t) throws IOException, ClassNotFoundException, InterruptedException {
         commandReceiver.min_by_creation_date();
     }
 }

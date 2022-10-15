@@ -1,7 +1,6 @@
 package Collections;
 
 import Exceptions.InvalidFieldException;
-import MainWindow.MainController;
 import javafx.beans.property.*;
 
 import java.io.Serializable;
@@ -28,8 +27,10 @@ public class Ticket implements Comparable, Serializable {
     private String place; //Поле не может быть null
     private double height; //Значение поля должно быть больше 0
     private Location location; //Поле не может быть null
-    public Ticket(){
+
+    public Ticket() {
     }
+
     private static final long serialVersionUID = 32L;
 
     public void setUser(String user) {
@@ -56,12 +57,15 @@ public class Ticket implements Comparable, Serializable {
         this.id = id;
         checkId();
     }
+
     public LongProperty getIdProperty() {
         return new SimpleLongProperty(id);
     }
+
     public StringProperty getNameProperty() {
         return new SimpleStringProperty(name);
     }
+
     public StringProperty getUserProperty() {
         return new SimpleStringProperty(user);
     }
@@ -123,7 +127,7 @@ public class Ticket implements Comparable, Serializable {
         return person;
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
@@ -158,7 +162,7 @@ public class Ticket implements Comparable, Serializable {
 
     @Override
     public String toString() {
-        return ( "id = " + id + ", name = " + name + ", coordinates: " + coordinates + "; creationDate = " + creationDate + ", price = " + price + ", Ticket type = " + type + ", person: " + person);
+        return ("id = " + id + ", name = " + name + ", coordinates: " + coordinates + "; creationDate = " + creationDate + ", price = " + price + ", Ticket type = " + type + ", person: " + person);
     }
 
 
@@ -168,7 +172,7 @@ public class Ticket implements Comparable, Serializable {
             return -1;
         }
         Ticket t = (Ticket) o;
-        return (int)  (t.getPrice() - this.getPrice());
+        return (int) (t.getPrice() - this.getPrice());
     }
 
     private void checkName() {
@@ -176,27 +180,32 @@ public class Ticket implements Comparable, Serializable {
             throw new InvalidFieldException("Error in field name");
         }
     }
+
     private void checkCoords() {
         if (coordinates == null) {
             throw new InvalidFieldException("Error in field coordinates");
         }
     }
+
     private void checkId() {
         if (id < 0) {
             throw new InvalidFieldException("Error in field id");
         }
     }
+
     private void checkPrice() {
         if (price <= 0) {
             throw new InvalidFieldException("Error in field price");
         }
     }
+
     private void checkDate() {
         if (creationDate == null) {
             throw new InvalidFieldException("Error in field creationDate");
         }
     }
-    private void checkPers(){
+
+    private void checkPers() {
         if (person == null) {
             throw new InvalidFieldException("Error in field person");
         }
@@ -276,25 +285,31 @@ public class Ticket implements Comparable, Serializable {
         public StringProperty getNameProperty() {
             return new SimpleStringProperty(name);
         }
+
         public FloatProperty getPriceProperty() {
             return new SimpleFloatProperty(price);
         }
+
         public CreateTicket place(String place) {
             this.place = place;
             return this;
         }
-        public CreateTicket coordinates(Float x, Integer y){
-            this.coordinates=new Coordinates(x,y);
+
+        public CreateTicket coordinates(Float x, Integer y) {
+            this.coordinates = new Coordinates(x, y);
             return this;
         }
-        public CreateTicket person(double height, Location location){
-            this.person=new Person(height,location);
+
+        public CreateTicket person(double height, Location location) {
+            this.person = new Person(height, location);
             return this;
         }
-        public CreateTicket location(Long xPl, Float yPl, Float zPl, String place){
+
+        public CreateTicket location(Long xPl, Float yPl, Float zPl, String place) {
             this.location = new Location(xPl, yPl, zPl, place);
             return this;
         }
+
         public Ticket createTicket() {
             return new Ticket(this);
         }

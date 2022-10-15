@@ -1,6 +1,5 @@
 package Other;
 
-import Actions.Command;
 import Collections.Ticket;
 
 import java.io.Serializable;

@@ -1,29 +1,26 @@
 package Collections;
 
-
-
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MapCommands implements Comparable<Ticket>{
+public class CommandsManager implements Comparable<Ticket> {
     private TicketMap tm;
 
-    private static Long id = 0L; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
-    private static LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private float price; //Значение поля должно быть больше 0
-    private TicketType type; //Поле может быть null
-    private Person person; //Поле не может быть null
+    private static Long id = 0L;
+    private String name;
+    private Coordinates coordinates;
+    private static LocalDateTime creationDate;
+    private float price;
+    private TicketType type;
+    private Person person;
     private Location location;
     private static ArrayList<Ticket> arrTic = new ArrayList<Ticket>();
 
-    public MapCommands(TicketMap tm) {
+    public CommandsManager(TicketMap tm) {
         this.tm = tm;
     }
 
@@ -47,12 +44,12 @@ public class MapCommands implements Comparable<Ticket>{
 
     public String min_by_creation_date() throws IOException {
         StringBuilder sb = new StringBuilder();
-        if (!tm.getTickets().isEmpty()){
+        if (!tm.getTickets().isEmpty()) {
             Map.Entry<Long, Ticket> tick = tm.getTickets().entrySet().stream().min(Comparator.comparing(x -> x.getValue().getCreationDate())).get();
             sb.append(tick.toString());
-    }else {
-        sb.append("empty");
-    }
+        } else {
+            sb.append("empty");
+        }
         return sb.toString();
     }
 
@@ -63,7 +60,7 @@ public class MapCommands implements Comparable<Ticket>{
                     .stream()
                     .sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))
                     .forEach(x -> sb.append(x.toString() + "\n"));
-        }else {
+        } else {
             sb.append("empty");
         }
         return sb.toString();
@@ -78,8 +75,8 @@ public class MapCommands implements Comparable<Ticket>{
         }
     }
 
-    public void remove_greater(Ticket tic, String user){
-        tm.getTickets().entrySet().removeIf(x -> (x.getValue().compareTo(tic) < 0)&&(x.getValue().getUser().equals(user)));
+    public void remove_greater(Ticket tic, String user) {
+        tm.getTickets().entrySet().removeIf(x -> (x.getValue().compareTo(tic) < 0) && (x.getValue().getUser().equals(user)));
     }
 
     public String show() throws IOException {
@@ -101,32 +98,27 @@ public class MapCommands implements Comparable<Ticket>{
         }
     }
 
-    public String update(Long id, Ticket tic){
-       // if (tm.getTickets().containsKey(id)&&tm.getTickets().get(id).getUser().equals(tic.getUser())) {
-            tm.getTickets().put(id, tic);
-            return "executed";
-        /*} else {
-            return "ELement with key " + id + " doesn't exist, to insert new element use command insert.";
-        }*/
+    public String update(Long id, Ticket tic) {
+        tm.getTickets().put(id, tic);
+        return "executed";
     }
 
     public String clear(String user) {
         StringBuilder sb = new StringBuilder();
         tm.getTickets().entrySet().removeIf(x -> x.getValue().getUser().equals(user));
-       // return "All " + user + "'s elements removed";
         return "executed";
     }
 
     public boolean replace_if_greater(Long id, Ticket tic, String user) throws IOException {
-            if ((tm.getTickets().get(id).compareTo(tic) > 0)&&(tm.getTickets().get(id).getUser().equals(user))) {
-                tm.getTickets().put(id, tic);
-                return true;
-            }else{
-                return false;
-            }
+        if ((tm.getTickets().get(id).compareTo(tic) > 0) && (tm.getTickets().get(id).getUser().equals(user))) {
+            tm.getTickets().put(id, tic);
+            return true;
+        } else {
+            return false;
         }
+    }
 
-    public LinkedHashMap<Long, Ticket> getTickets(){
+    public LinkedHashMap<Long, Ticket> getTickets() {
         return tm.getTickets();
     }
 
@@ -139,8 +131,10 @@ public class MapCommands implements Comparable<Ticket>{
     }
 
     @Override
-    public String toString(){
-        return (name + ", " + coordinates.getX() + ", " + coordinates.getY() + ", " + price + ", " + type + ", " + person.getHeight() + ", " + location.getX() + ", " + location.getY() + ", " + location.getZ() + ", " + location.getName() + "\n");
+    public String toString() {
+        return (name + ", " + coordinates.getX() + ", " + coordinates.getY() + ", " + price + ", "
+                + type + ", " + person.getHeight() + ", " + location.getX() + ", " + location.getY()
+                + ", " + location.getZ() + ", " + location.getName() + "\n");
 
     }
 
@@ -151,15 +145,15 @@ public class MapCommands implements Comparable<Ticket>{
                     .stream()
                     .sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
                     .forEach(x -> sb.append(x.toString() + "\n"));
-        }else {
+        } else {
             sb.append("empty");
         }
         return sb.toString();
     }
 
-    public ArrayList<Ticket> getArr(){
+    public ArrayList<Ticket> getArr() {
         arrTic.clear();
-        tm.getTickets().entrySet().forEach(x -> arrTic.add(x.getValue()));
+        tm.getTickets().forEach((key, value) -> arrTic.add(value));
         System.out.println(arrTic.toString());
         return arrTic;
     }

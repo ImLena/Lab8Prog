@@ -1,6 +1,6 @@
 
-import Requests.Server2;
-import Requests.ServerHandler;
+import Controller.ServerModule;
+import Controller.ServerHandler;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -11,11 +11,11 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class MainServer {
-    private static Logger log = Logger.getLogger(Server2.class.getName());
+    private static Logger log = Logger.getLogger(ServerModule.class.getName());
     public static void main(String[] args) throws IOException, SQLException {
         try{
             ServerHandler sh = port();
-            Server2.server(sh);
+            ServerModule.server(sh);
             } catch (IllegalArgumentException e){
                 System.out.println("wrong port");
                 main(args);

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-
 <AnchorPane prefHeight="200.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/11.0.2"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistWindow.PortController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegisterWindow.PortController">
     <TextField fx:id="arg" layoutX="51.0" layoutY="88.0"/>
     <Label fx:id="argName" layoutX="51.0" layoutY="71.0" prefHeight="18.0" prefWidth="152.0" text="Enter argument:"
            textAlignment="CENTER"/>

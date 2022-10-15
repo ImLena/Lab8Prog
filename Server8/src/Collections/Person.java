@@ -1,7 +1,5 @@
 package Collections;
 
-import Exceptions.InvalidFieldException;
-
 import java.io.Serializable;
 
 /**
@@ -9,8 +7,8 @@ import java.io.Serializable;
  */
 
 public class Person implements Serializable {
-    private double height; //Значение поля должно быть больше 0
-    private Location location; //Поле не может быть null
+    private double height;
+    private Location location;
     private static final long serialVersionUID = 32L;
 
 

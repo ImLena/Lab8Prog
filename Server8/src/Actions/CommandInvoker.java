@@ -1,8 +1,8 @@
 package Actions;
 
-import Collections.MapCommands;
-import Other.ReadCommand;
+import Collections.CommandsManager;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,25 +12,9 @@ public class CommandInvoker {
 
     private static CommandInvoker instance;
 
-    private Command clear;
-    private Command cgtp;
-    private Command es;
-    public Command help;
-    private Command history;
-    private Command info;
-    private Command insert;
-    private Command mbcd;
-    private Command pd;
-    private Command remove;
-    private Command rg;
-    private Command rig;
-    private Command show;
-    private Command update;
-    private Command login;
-    private Command regist;
-
     private final LinkedHashMap<String, Command> commands = new LinkedHashMap<>();
-    public void addCom(){
+
+    public void addCom() {
         commands.put("clear", new Clear());
         commands.put("count_greater_than_price", new CountGreaterThanPrice());
         commands.put("info", new Info());
@@ -43,18 +27,17 @@ public class CommandInvoker {
         commands.put("show", new Show());
         commands.put("update", new Update());
         commands.put("login", new Login());
-        commands.put("regist", new Regist());
+        commands.put("register", new Register());
     }
-    public Answer executeCom(MapCommands mc, ReadCommand com) throws IOException, ClassNotFoundException {
+
+    public Answer executeCom(CommandsManager mc, ReadCommand com) throws IOException {
         addCom();
         Command cmd = commands.get(com.getComm());
         try {
-            Answer response = cmd.execute(com, mc);
-            return response;
-        }
-        catch (SQLException e){
-            return new Answer("Something strange happened with Data Base: " +  e.getMessage(), null);
-        } catch (NullPointerException ex){
+            return cmd.execute(com, mc);
+        } catch (SQLException e) {
+            return new Answer("Something strange happened with Data Base: " + e.getMessage(), null);
+        } catch (NullPointerException ex) {
             ex.printStackTrace();
             return new Answer("Server let out a death rattle", null);
         }

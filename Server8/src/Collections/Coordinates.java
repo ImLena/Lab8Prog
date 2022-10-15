@@ -2,7 +2,6 @@ package Collections;
 
 import Exceptions.InvalidFieldException;
 
-import java.io.InputStream;
 import java.io.Serializable;
 
 /**
@@ -11,11 +10,11 @@ import java.io.Serializable;
 
 
 public class Coordinates implements Serializable {
-    private Float x; //Значение поля должно быть больше -502
-    private Integer y; //Поле не может быть null
+    private Float x;
+    private Integer y;
     private static final long serialVersionUID = 32L;
 
-    public Coordinates(Float x, Integer y){
+    public Coordinates(Float x, Integer y) {
         this.x = x;
         this.y = y;
     }
@@ -38,12 +37,14 @@ public class Coordinates implements Serializable {
     public Integer getY() {
         return y;
     }
+
     private void checkCoordsx() {
         if (x <= -502) {
             throw new InvalidFieldException("Error in field x");
         }
     }
-    private void checkCoordsy(){
+
+    private void checkCoordsy() {
         if (y == null) {
             throw new InvalidFieldException("Error in field y");
         }

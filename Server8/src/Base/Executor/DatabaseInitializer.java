@@ -8,9 +8,9 @@ import java.util.Arrays;
 
 public final class DatabaseInitializer {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/"; //"jdbc:postgresql://pg:5432/studs";
-    private static final String LOGIN = "postgres";
-    private static final String PASSWORD = "puz273";
+    private static final String URL = "jdbc:postgresql://localhost:5432/";
+    private static final String LOGIN = "";
+    private static final String PASSWORD = "";
     private static final String DRIVER = "org.postgresql.Driver";
 
     private static Connection connection;
@@ -24,12 +24,6 @@ public final class DatabaseInitializer {
 
         try {
             initialize();
-
-// Проверка на то, что база уже инициализирована
-         /*   if (isCreated()) {
-                return;
-            }
-*/
             Arrays.stream(sqlCommands.split(";"))
                     .forEach(sqlCommand -> runSql(sqlCommand, connection));
 

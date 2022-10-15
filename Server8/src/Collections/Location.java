@@ -10,10 +10,10 @@ import java.io.Serializable;
 
 
 public class Location implements Serializable {
-    private Long x; //Поле не может быть null
-    private Float y; //Поле не может быть null
-    private Float z; //Поле не может быть null
-    private String name; //Поле не может быть null
+    private Long x;
+    private Float y;
+    private Float z;
+    private String name;
     private static final long serialVersionUID = 32L;
 
     public Location(Long x, Float y, Float z, String name) {
@@ -50,17 +50,20 @@ public class Location implements Serializable {
             throw new InvalidFieldException("Error in field name (location)");
         }
     }
+
     private void checkLocx() {
         if (x == null) {
             throw new InvalidFieldException("Error in field x (location)");
         }
     }
+
     private void checkLocy() {
         if (y == null) {
             throw new InvalidFieldException("Error in field y (location)");
         }
     }
-    private void checkLocz(){
+
+    private void checkLocz() {
         if (z == null) {
             throw new InvalidFieldException("Error in field z (location)");
         }

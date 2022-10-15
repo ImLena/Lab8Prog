@@ -19,7 +19,7 @@ public class RemoveGreater extends Command {
     }
 
     @Override
-    public String help(){
+    public String help() {
         return "remove_greater {element} - remove all elements, which price is greater";
     }
 

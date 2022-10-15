@@ -23,15 +23,19 @@ public class Location implements Serializable {
         this.z = z;
         this.name = name;
     }
+
     public FloatProperty getYProperty() {
         return new SimpleFloatProperty(y);
     }
+
     public FloatProperty getZProperty() {
         return new SimpleFloatProperty(z);
     }
+
     public LongProperty getXProperty() {
         return new SimpleLongProperty(x);
     }
+
     public StringProperty getPlaceProperty() {
         return new SimpleStringProperty(name);
     }
@@ -51,7 +55,7 @@ public class Location implements Serializable {
         checkLocz();
     }
 
-    public void setName(String name) throws InvalidFieldException{
+    public void setName(String name) throws InvalidFieldException {
         this.name = name;
         checkLocName();
     }
@@ -91,12 +95,14 @@ public class Location implements Serializable {
             throw new InvalidFieldException("Error in field x (location)");
         }
     }
+
     private void checkLocy() {
         if (y == null) {
             throw new InvalidFieldException("Error in field y (location)");
         }
     }
-    private void checkLocz(){
+
+    private void checkLocz() {
         if (z == null) {
             throw new InvalidFieldException("Error in field z (location)");
         }

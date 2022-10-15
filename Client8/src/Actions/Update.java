@@ -19,12 +19,12 @@ public class Update extends Command {
     }
 
     @Override
-    public String help(){
+    public String help() {
         return "update key {element} - update element by key";
     }
 
     @Override
     protected void execute(String[] args, Scanner in, Ticket t) throws IOException, ClassNotFoundException, InterruptedException {
-            commandReceiver.update(args, t, in);
+        commandReceiver.update(args, t, in);
     }
 }

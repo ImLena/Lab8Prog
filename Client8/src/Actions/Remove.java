@@ -19,15 +19,15 @@ public class Remove extends Command {
     }
 
     @Override
-    public String help(){
+    public String help() {
         return "remove_key key - remove element by key";
     }
 
     @Override
     protected void execute(String[] args, Scanner in, Ticket t) throws IOException {
-        if (args.length>1){
+        if (args.length > 1) {
             commandReceiver.remove(args);
-        }else {
+        } else {
             System.out.println("Enter id after command");
         }
     }

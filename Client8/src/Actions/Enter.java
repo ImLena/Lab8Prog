@@ -4,9 +4,9 @@ package Actions;
 import Collections.*;
 import Exceptions.InvalidFieldException;
 import Other.Client;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -25,11 +25,11 @@ public class Enter implements Serializable {
     private LocalDateTime creationDate = LocalDateTime.now();
 
 
-    public Enter(){
+    public Enter() {
 
     }
 
-    public Ticket enter(String[] s, Scanner in){
+    public Ticket enter(String[] s, Scanner in) {
         try {
             if (s.length == 1) {
                 enterId(in);
@@ -51,26 +51,26 @@ public class Enter implements Serializable {
             enterperson();
             enterdate();
             enterUser();
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Long ID expected");
         }
-            return ticket;
+        return ticket;
 
     }
 
-    public void enterUser(){
+    public void enterUser() {
         ticket.setUser(Client.getLogin());
     }
 
-    public void enterId(Scanner in){
+    public void enterId(Scanner in) {
         System.out.println("Enter ID (Long, >0)");
         try {
             Long id = Long.valueOf(in.nextLine());
-                enterId(id, in);
-        }catch (InputMismatchException e){
+            enterId(id, in);
+        } catch (InputMismatchException e) {
             System.out.println("Wrong type, try again");
             enterId(in);
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Enter Long");
             enterId(in);
         }
@@ -97,17 +97,18 @@ public class Enter implements Serializable {
         } catch (InvalidFieldException e) {
             System.out.println(e.getMessage());
             entercoordsx(in);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Incorrect enter, enter float");
             entercoordsx(in);
-        } catch (InputMismatchException e){
+        } catch (InputMismatchException e) {
             System.out.println("Wrong type, try again");
             entercoordsx(in);
         }
     }
-    public void entercoordsy(Scanner in){
+
+    public void entercoordsy(Scanner in) {
         System.out.println("Enter y coordinate (Integer)");
-        try{
+        try {
             Integer y = Integer.valueOf(in.nextLine());
             coordinates.setY(y);
 
@@ -119,7 +120,8 @@ public class Enter implements Serializable {
             entercoordsy(in);
         }
     }
-    public void entercoords(){
+
+    public void entercoords() {
         ticket.setCoordinates(coordinates);
     }
 
@@ -147,9 +149,9 @@ public class Enter implements Serializable {
         try {
             String typeStr = in.nextLine();
             TicketType type;
-            if (typeStr.isEmpty()){
+            if (typeStr.isEmpty()) {
                 type = null;
-            }else {
+            } else {
                 type = TicketType.valueOf(typeStr);
             }
             ticket.setType(type);
@@ -194,7 +196,7 @@ public class Enter implements Serializable {
         } catch (InvalidFieldException e) {
             System.out.println(e.getMessage());
             enterxloc(in);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Incorrect enter, enter Long");
             enterxloc(in);
         }
@@ -224,7 +226,7 @@ public class Enter implements Serializable {
         } catch (InvalidFieldException e) {
             System.out.println(e.getMessage());
             enterzloc(in);
-        }catch (InputMismatchException e){
+        } catch (InputMismatchException e) {
             System.out.println("Wrong type, try again");
             enterzloc(in);
         } catch (NumberFormatException e) {
@@ -232,28 +234,31 @@ public class Enter implements Serializable {
             enterzloc(in);
         }
     }
-    public void enterdate(){
+
+    public void enterdate() {
         try {
             ticket.setCreationDate(creationDate);
-        }catch (InvalidFieldException e) {
+        } catch (InvalidFieldException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void enterloc(){
+    public void enterloc() {
         try {
             person.setLocation(loc);
-        }catch (InvalidFieldException e) {
+        } catch (InvalidFieldException e) {
             System.out.println(e.getMessage());
         }
     }
-    public void enterperson(){
-        try{
+
+    public void enterperson() {
+        try {
             ticket.setPerson(person);
-        }catch (InvalidFieldException e){
+        } catch (InvalidFieldException e) {
             System.out.println(e.getMessage());
         }
     }
+
     public void enterId(Long id, Scanner in) {
         try {
             ticket.setId(id);

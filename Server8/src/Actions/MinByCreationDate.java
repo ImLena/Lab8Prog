@@ -1,8 +1,8 @@
 package Actions;
 
-import Collections.MapCommands;
-import Other.ReadCommand;
+import Collections.CommandsManager;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.io.IOException;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -19,12 +19,12 @@ public class MinByCreationDate extends Command {
 
 
     @Override
-    public Answer execute(ReadCommand com, MapCommands mc) throws IOException {
+    public Answer execute(ReadCommand com, CommandsManager mc) throws IOException {
         String answ;
         try {
             lock.readLock().lock();
             answ = mc.min_by_creation_date();
-        }finally {
+        } finally {
             lock.readLock().unlock();
         }
         return new Answer(answ, null);

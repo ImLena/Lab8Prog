@@ -1,8 +1,8 @@
 package Actions;
 
-import Collections.MapCommands;
-import Other.ReadCommand;
+import Collections.CommandsManager;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.io.IOException;
 
@@ -12,8 +12,9 @@ import java.io.IOException;
 
 public class Info extends Command {
     private static final long serialVersionUID = 32L;
+
     @Override
-    public Answer execute (ReadCommand com, MapCommands mc) throws IOException {
+    public Answer execute(ReadCommand com, CommandsManager mc) throws IOException {
         return new Answer(mc.info(), null);
     }
 }

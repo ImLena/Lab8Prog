@@ -9,8 +9,6 @@ public class BaseConnection {
 
     static final String JDBC_DRIVER = "org.postgresql.Driver";
 
-
-
     public static Connection getConnect(String url, String login, String password) {
         try {
             Class.forName(JDBC_DRIVER);

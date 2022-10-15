@@ -30,6 +30,7 @@ public class Coordinates implements Serializable {
     public FloatProperty getXProperty() {
         return new SimpleFloatProperty(x);
     }
+
     public IntegerProperty getYProperty() {
         return new SimpleIntegerProperty(y);
     }
@@ -53,12 +54,14 @@ public class Coordinates implements Serializable {
     public Integer getY() {
         return y;
     }
+
     private void checkCoordsx() {
         if (x <= -502) {
             throw new InvalidFieldException("Error in field x");
         }
     }
-    private void checkCoordsy(){
+
+    private void checkCoordsy() {
         if (y == null) {
             throw new InvalidFieldException("Error in field y");
         }

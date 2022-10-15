@@ -1,23 +1,17 @@
-package RegistWindow;
+package RegisterWindow;
 
 import Collections.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.beans.IntrospectionException;
-import java.net.URL;
-import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class enterTicController {
@@ -76,56 +70,46 @@ public class enterTicController {
         try {
             X = Float.parseFloat(x.getText());
         } catch (NumberFormatException e) {
-        //    showAlert(currentBundle.getString("coordX"), currentBundle.getString("IncorrectDataField"));
             return;
         }
         try {
             Y = Integer.parseInt(y.getText());
         } catch (NumberFormatException e) {
-          //  showAlert(currentBundle.getString("coordY"), currentBundle.getString("IncorrectDataField"));
             return;
         }
         try {
             Price = Float.parseFloat(price.getText());
         } catch (NumberFormatException e) {
-           // showAlert(currentBundle.getString("health"), currentBundle.getString("IncorrectDataField"));
             return;
         }
         try {
             Height = Double.parseDouble(height.getText());
         } catch (NumberFormatException e) {
-            //    showAlert(currentBundle.getString("coordX"), currentBundle.getString("IncorrectDataField"));
             return;
         }
         try {
             XPl = Long.parseLong(xPl.getText());
         } catch (NumberFormatException e) {
-         //   showAlert(currentBundle.getString("heartCount"), currentBundle.getString("IncorrectDataField"));
             return;
         }
         try {
             YPl = Float.parseFloat(yPl.getText());
         } catch (NumberFormatException e) {
-            //    showAlert(currentBundle.getString("coordX"), currentBundle.getString("IncorrectDataField"));
             return;
         }
         try {
             ZPl = Float.parseFloat(zPl.getText());
         } catch (NumberFormatException e) {
-            //    showAlert(currentBundle.getString("coordX"), currentBundle.getString("IncorrectDataField"));
             return;
         }
         Type = type.getValue();
         Place = place.getText();
-        checker();
+        if (!checker()) return;
 
         try {
-            //Coordinates coords = new Coordinates();
-            coordinates = new Coordinates(X,Y);
-            //Location loc = new Location();
-            location= new Location(XPl, YPl, ZPl, Place);
-           // Person person = new Person();
-            person=new Person(Height, location);
+            coordinates = new Coordinates(X, Y);
+            location = new Location(XPl, YPl, ZPl, Place);
+            person = new Person(Height, location);
             tic.setName(Name);
             tic.setCoordinates(coordinates);
             tic.setPrice(Price);
@@ -135,7 +119,7 @@ public class enterTicController {
             Stage thisStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             thisStage.close();
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -183,58 +167,17 @@ public class enterTicController {
         return place;
     }
 
-    private void checker(){
-        if (Price <= 0) {
-        //  showAlert(currentBundle.getString("health"), currentBundle.getString("IncorrectNumber"));
-        return;
-    }
-        if (xPl == null) {
-        //  showAlert(currentBundle.getString("heartCount"), currentBundle.getString("IncorrectNumber"));
-        return;
-    }
-        if (Place.trim().isEmpty()) {
-            //showAlert(currentBundle.getString("chapterName"), currentBundle.getString("IncorrectDataField"));
-            return;
-        }
-        if (Name.trim().isEmpty()) {
-            //   showAlert(currentBundle.getString("name"), currentBundle.getString("IncorrectDataField"));
-            return;
-        }
-        if (Y == null) {
-            //  showAlert(currentBundle.getString("coordY"), currentBundle.getString("IncorrectNumber"));
-            return;
-        }
-        if (X < -502) {
-            //  showAlert(currentBundle.getString("coordX"), currentBundle.getString("IncorrectNumber"));
-            return;
-        }
-        if (Name.trim().isEmpty()) {
-            //   errorWindow(currentBundle.getString("name"), currentBundle.getString("IncorrectDataField"));
-            return;
-        }
-    }
-
-    public void initialize(URL url, ResourceBundle resourceBundle) {/*
-        ArrayList<String> col = Stream.of(Color.values()).map(Color::name).collect(Collectors.toCollection(ArrayList::new));
-        col.add("");
-        String[] colors = col.toArray(new String[0]);
-        String[] country = Stream.of(Country.values()).map(Country::name).toArray(String[]::new);*/
-     /*   type.getItems().addAll(colors);
-        type.getSelectionModel().select("");
-      //  this.resourceBundle = resourceBundle;
-        if (command.equals("update")) {
-            Ticket tic = LocalCollection.getTickets().stream().filter(i -> i.getId() == Long.parseLong(id)).findFirst().orElse(null);
-            fillFields(tic);
-        }*/
+    private boolean checker() {
+        return !(Price <= 0) && xPl != null && Y != null && X >= -502
+                && !Place.trim().isEmpty() && !Name.trim().isEmpty();
     }
 
     private void errorWindow(String fieldName, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        /*alert.setTitle(currentBundle.getString("Error"));
-        alert.setHeaderText(currentBundle.getString("IncorrectField") + "\"" + fieldName + "\"");
-        */alert.setContentText(content);
+        alert.setContentText(content);
         alert.showAndWait();
     }
+
     public void setCurrentBundle(ResourceBundle currentBundle) {
         this.currentBundle = currentBundle;
     }

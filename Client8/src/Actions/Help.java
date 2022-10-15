@@ -12,7 +12,7 @@ public class Help extends Command {
     transient final CommandReceiver commandReceiver;
     private static final long serialVersionUID = 32L;
 
-    public Help (CommandReceiver commandReceiver) {
+    public Help(CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
 

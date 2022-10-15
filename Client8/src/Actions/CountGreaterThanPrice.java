@@ -18,12 +18,13 @@ public class CountGreaterThanPrice extends Command {
     }
 
     @Override
-    protected String  help(){
-       return "count_greater_than_price price - enter number of elements with price more than entered ";
+    protected String help() {
+        return "count_greater_than_price price - enter number of elements with price more than entered ";
     }
+
     @Override
     protected void execute(String[] args, Scanner in, Ticket t) throws IOException {
         commandReceiver.count_greater_than_price(args);
 
-        }
     }
+}

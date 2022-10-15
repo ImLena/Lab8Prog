@@ -13,12 +13,12 @@ public class ExecuteScript extends Command {
     transient final CommandReceiver commandReceiver;
     private static final long serialVersionUID = 32L;
 
-    public ExecuteScript (CommandReceiver commandReceiver) {
+    public ExecuteScript(CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
 
     @Override
-    protected String help(){
+    protected String help() {
         return "execute_script file_name - read and execute script from file";
     }
 
@@ -26,7 +26,7 @@ public class ExecuteScript extends Command {
     protected void execute(String[] args, Scanner in, Ticket t) {
         if (args.length > 1) {
             commandReceiver.execute_script(args[1]);
-        }else {
+        } else {
             System.out.println("Enter file name after command");
         }
     }

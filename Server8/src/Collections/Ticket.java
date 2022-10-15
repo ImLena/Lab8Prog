@@ -3,9 +3,7 @@ package Collections;
 import Exceptions.InvalidFieldException;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * Класс для заполнения полей ticket
@@ -13,13 +11,13 @@ import java.util.Date;
 
 public class Ticket implements Comparable, Serializable {
     private String user;
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
-    private LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private float price; //Значение поля должно быть больше 0
-    private TicketType type; //Поле может быть null
-    private Person person; //Поле не может быть null
+    private Long id;
+    private String name;
+    private Coordinates coordinates;
+    private LocalDateTime creationDate;
+    private float price;
+    private TicketType type;
+    private Person person;
 
     public Ticket(String name, Coordinates coordinates, float price, TicketType type, Person person, String user) {
         this.name = name;
@@ -52,41 +50,45 @@ public class Ticket implements Comparable, Serializable {
         checkDate();
     }
 
-    public void setUser(String user){
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public String getUser(){
+    public String getUser() {
         return user;
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public Coordinates getCoordinates(){
+    public Coordinates getCoordinates() {
         return coordinates;
     }
 
-    public TicketType getType(){
+    public TicketType getType() {
         return type;
     }
 
-    public Person getPerson(){
+    public Person getPerson() {
         return person;
     }
 
     @Override
     public String toString() {
-        return ( "id = " + id + ", name = " + name + ", coordinates: " + coordinates + "; creationDate = " + creationDate + ", price = " + price + ", Ticket type = " + type + ", person: " + person + ". Element belongs to " + user);
+        return ("id = " + id + ", name = " + name + ", coordinates: " + coordinates + "; creationDate = "
+                + creationDate + ", price = " + price + ", Ticket type = " + type + ", person: " + person
+                + ". Element belongs to " + user);
     }
 
-    public String toParse(){
-        return name + ", " + coordinates.getX() + ", " + coordinates.getY() + ", " + price + ", " + type + ", " + person.getHeight() + ", "  + person.getLoc().getName() + ", " + person.getLoc().getX() + ", " + person.getLoc().getY() + ", " + person.getLoc().getZ() + "\n";
+    public String toParse() {
+        return name + ", " + coordinates.getX() + ", " + coordinates.getY() + ", " + price + ", "
+                + type + ", " + person.getHeight() + ", " + person.getLoc().getName() + ", "
+                + person.getLoc().getX() + ", " + person.getLoc().getY() + ", " + person.getLoc().getZ() + "\n";
     }
 
     @Override
@@ -95,7 +97,7 @@ public class Ticket implements Comparable, Serializable {
             return -1;
         }
         Ticket t = (Ticket) o;
-        return (int)  (t.getPrice() - this.getPrice());
+        return (int) (t.getPrice() - this.getPrice());
     }
 
     private void checkId() {
@@ -103,6 +105,7 @@ public class Ticket implements Comparable, Serializable {
             throw new InvalidFieldException("Error in field id");
         }
     }
+
     private void checkDate() {
         if (creationDate == null) {
             throw new InvalidFieldException("Error in field creationDate");

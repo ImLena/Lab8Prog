@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<AnchorPane focusTraversable="true" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: #5EC4CD;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistWindow.RegWindow">
+<AnchorPane focusTraversable="true" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: #5EC4CD;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegisterWindow.RegWindow">
    <!-- <MenuBar prefHeight="25.0" prefWidth="260.0">
         <Menu fx:id="selectLanguage" mnemonicParsing="false" text="Выбрать язык">&lt;!&ndash;
             <MenuItem mnemonicParsing="false" onAction="#switchRussian" text="Русский"/>

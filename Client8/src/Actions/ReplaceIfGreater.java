@@ -19,15 +19,15 @@ public class ReplaceIfGreater extends Command {
     }
 
     @Override
-    public String help(){
+    public String help() {
         return "replace_is_greater key {element} - replace element by key if new value is greater";
     }
 
     @Override
     protected void execute(String[] args, Scanner in, Ticket t) throws IOException, InterruptedException, ClassNotFoundException {
-        if (args.length>1){
+        if (args.length > 1) {
             commandReceiver.replace_if_greater(args, t, in);
-        }else {
+        } else {
             System.out.println("Enter id after command");
         }
     }

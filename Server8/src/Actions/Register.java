@@ -1,16 +1,16 @@
 package Actions;
 
-import Collections.MapCommands;
+import Collections.CommandsManager;
 import DataBase.RegistBase;
-import Other.ReadCommand;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class Regist extends Command {
+public class Register extends Command {
     @Override
-    public Answer execute(ReadCommand com, MapCommands mc) throws IOException, SQLException {
+    public Answer execute(ReadCommand com, CommandsManager mc) throws IOException, SQLException {
         String login = com.getLogin();
         String pass = com.getPass();
         return new Answer(RegistBase.addNewUser(login, pass), null);

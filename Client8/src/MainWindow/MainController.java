@@ -1,14 +1,15 @@
 package MainWindow;
 
 import Actions.*;
-import Collections.*;
+import Collections.LocalCollection;
+import Collections.Ticket;
+import Collections.TicketType;
 import Other.Client;
 import Other.ReadCommand;
-import RegistWindow.RegWindow;
-import RegistWindow.enterTicController;
+import RegisterWindow.RegWindow;
+import RegisterWindow.enterTicController;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -18,29 +19,25 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.shape.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LongStringConverter;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Logger;
@@ -160,14 +157,14 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             currentBundle = ResourceBundle.getBundle("bundles/bundles", new Locale("en"));
-            ObservableList<String> languages = FXCollections.observableArrayList("en_CA","ru", "is","pl");
+            ObservableList<String> languages = FXCollections.observableArrayList("en_CA", "ru", "is", "pl");
             lang.getItems().addAll(languages);
             client = new Client(this);
             client.loginClient(666);
             Client newClient = new Client(this);
-            String fxmlFile = "/RegistWindow/regWindow.fxml";
+            String fxmlFile = "/RegisterWindow/regWindow.fxml";
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-         //   fxmlLoader.setResources(ResourceBundle.getBundle("bundles/bundles", new Locale("ru")));
+            //   fxmlLoader.setResources(ResourceBundle.getBundle("bundles/bundles", new Locale("ru")));
             Parent root = fxmlLoader.load();
             RegWindow reg = fxmlLoader.getController();
             reg.setClient(client);
@@ -200,7 +197,7 @@ public class MainController implements Initializable {
         }
     }
 
-    public void setAnswer(String s){
+    public void setAnswer(String s) {
         textRes.setText(currentBundle.getString(s));
     }
 
@@ -232,52 +229,10 @@ public class MainController implements Initializable {
         tickets.setEditable(true);
 
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
-       name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
         name.setCellFactory(TextFieldTableCell.forTableColumn());
-      //  name.addEventHandler(name.setOnEditCommit() -> updateByCell());
- //       name.setCellValueFactory(tickets -> tickets.getValue().getNameProperty());
-     //   name.setOnEditCommit(event -> getTableDoubleClick());
         name.cellFactoryProperty().addListener((observable, oldValue, newValue) -> updateByCell());
-       /* Callback<TableColumn<Ticket, String>, TableCell<Ticket, String>> cellFactory = new Callback<TableColumn<Ticket, String>, TableCell<Ticket, String>>() {
-            @Override
-            public TableCell<Ticket, String> call(final TableColumn<Ticket, String> param) {
-                final TableCell<Ticket, String> cell = new TableCell<Ticket, String>() {
 
-                    private final Button btn = new Button("Action");
-
-                    {
-                        btn.setOnAction((ActionEvent event) -> {
-                            Data data = getTableView().getItems().get(getIndex());
-                            System.out.println("selectedData: " + data);
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(btn);
-                        }
-                    }
-                };
-                return cell;
-            }
-        };*/
-        //name.textProperty().addListener(event -> getTableDoubleClick());
-                /*
-        name.setOnEditCommit(event -> {
-            try {
-                update();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });*/
         x.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
         x.setCellValueFactory(tickets -> tickets.getValue().getCoords().getXProperty().asObject());
         y.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
@@ -288,13 +243,9 @@ public class MainController implements Initializable {
         price.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
 
         price.setCellValueFactory(tickets -> tickets.getValue().getPriceProperty().asObject());
-     //   price.setOnEditCommit(event -> getTableDoubleClick());
-
-       // type.setCellFactory(TextFieldTableCell.forTableColumn());
 
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
         height.setCellValueFactory(tickets -> tickets.getValue().getPerson().getHeightProperty().asObject());
-        // xPl.setCellValueFactory(new PropertyValueFactory<>("xPl"));
         xPl.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
         yPl.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
         zPl.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
@@ -305,7 +256,6 @@ public class MainController implements Initializable {
         place.setCellFactory(TextFieldTableCell.forTableColumn());
         place.setCellValueFactory(tickets -> tickets.getValue().getPerson().getLocation().getPlaceProperty());
         user.setCellValueFactory(new PropertyValueFactory<>("user"));
-        //  LocalCollection.setTickets(id, name, x, y, creationDate, price, type, );
         updateTable();
     }
 
@@ -330,9 +280,8 @@ public class MainController implements Initializable {
         SortedList<Ticket> sorted = new SortedList<>(filtered);
         sorted.comparatorProperty().bind(tickets.comparatorProperty());
         tickets.setItems(sorted);
-       // filtered.addListener(new ListChangeListener<Ticket> list);
-        //  tickets.setItems(LocalCollection.getTickets());
     }
+
     private void setUpTimer() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(8), ev -> {
             try {
@@ -351,29 +300,23 @@ public class MainController implements Initializable {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
-    /*private void getData(){
-        Ticket t=new Ticket();
-        Coordinates coordinates = new Coordinates(Float.valueOf(x.getText()), Integer.valueOf(y.getText()));
-        Location location = new Location(Long.valueOf(xPl.getText()), Float.valueOf(yPl.getText()), Float.valueOf(zPl.getText()), place.getText());
-        Person person = new Person(Double.valueOf(height.getText()), location);
-        t.setId(Long.valueOf(id));
 
-    }*/
-    private void updateByCell(){
+    private void updateByCell() {
 
         tickets.setRowFactory(tv -> {
             TableRow<Ticket> row = new TableRow<>();
             if ((!row.isEmpty())) {
                 Ticket selected = row.getItem();
                 arg.setText(String.valueOf(selected.getId()));
-                        String com[] = new String[2];
-                        com[0] = "update";
-                        com[1] = String.valueOf(selected.getId());
-                        ci.execute(com, in, selected);
+                String com[] = new String[2];
+                com[0] = "update";
+                com[1] = String.valueOf(selected.getId());
+                ci.execute(com, in, selected);
             }
             return row;
         });
     }
+
     private void getTableDoubleClick() {
         tickets.setRowFactory(tv -> {
             TableRow<Ticket> row = new TableRow<>();
@@ -394,140 +337,128 @@ public class MainController implements Initializable {
     }
 
 
-
     public void getCollection() throws IOException, ClassNotFoundException, InterruptedException {
         client.writeCommand(new ReadCommand("show", null, null, client.getLogin(), client.getPassword()));
         Thread.sleep(1500);
         arrTic = client.getMessage().getTickets();
-        // System.out.println(arrTic.toString());
         LocalCollection.setTickets(arrTic);
     }
 
 
-    public void help(){
+    public void help() {
         nowCom[0] = "help";
         ci.execute(nowCom, in, null);
-        // System.out.println(cr.getAnswer());
-        //  textRes.setText(currentBundle.getString("helpStr"));
     }
+
     public void count_greater_than_price() throws IOException {
-        nowCom[0]="count_greater_than_price";
-        nowCom[1]=getArg();
+        nowCom[0] = "count_greater_than_price";
+        nowCom[1] = getArg();
         checkArg(nowCom[1]);
         ci.execute(nowCom, in, null);
-        //  cr.count_greater_than_price(nowCom);
-        //textRes.setText(cr.getAnswer());
     }
+
     public void remove_greater() throws InterruptedException, IOException, ClassNotFoundException {
-        nowCom[0]="remove_greater";
-        nowCom[1]=getArg();
-        checkArg(nowCom[1]);checkArg(nowCom[1]);
+        nowCom[0] = "remove_greater";
+        nowCom[1] = getArg();
+        checkArg(nowCom[1]);
+        checkArg(nowCom[1]);
         Ticket t;
         t = enterTic();
         try {
             t.setId(Long.parseLong(nowCom[1]));
             getCollection();
-        }catch (NullPointerException | IOException | ClassNotFoundException | InterruptedException e){
+        } catch (NullPointerException | IOException | ClassNotFoundException | InterruptedException e) {
             showAlert(Alert.AlertType.INFORMATION, "Error", "Enter arg");
         }
         t.setUser(client.getLogin());
         ci.execute(nowCom, in, t);
-        //  cr.remove_greater(nowCom, t, in);
-        //textRes.setText(currentBundle.getString(cr.getAnswer()));
     }
-    public void execute_script(){
+
+    public void execute_script() {
         String[] s = new String[2];
         s[0] = "execute_script";
         s[1] = "script.txt";
         ci.execute(s, in, null);
-        // textRes.setText(cr.getAnswer());
     }
-    public void history(){
+
+    public void history() {
         nowCom[0] = "history";
         ci.execute(nowCom, in, null);
-        //   textRes.setText(cr.getAnswer());
     }
 
     public void info() {
         nowCom[0] = "info";
         ci.execute(nowCom, in, null);
-        //   textRes.setText(cr.getAnswer());
     }
+
     public void insert() throws InterruptedException, IOException, ClassNotFoundException {
-        nowCom[0]="insert";
-        nowCom[1]=getArg();
+        nowCom[0] = "insert";
+        nowCom[1] = getArg();
         checkArg(nowCom[1]);
         Ticket t;
         t = enterTic();
         try {
             t.setId(Long.parseLong(nowCom[1]));
             getCollection();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             showAlert(Alert.AlertType.INFORMATION, "Error", "Enter arg");
         }
-        //t.setCreationDate(toLocalDateTime());
         t.setCreationDate(LocalDateTime.now());
         t.setUser(client.getLogin());
         ci.execute(nowCom, in, t);
-        //    cr.insert(nowCom, t, in);
-        //   textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
         visual();
     }
+
     public void min_by_creation_date() throws InterruptedException, IOException, ClassNotFoundException {
         nowCom[0] = "min_by_creation_date";
         ci.execute(nowCom, in, null);
-        //   textRes.setText(cr.getAnswer());
     }
+
     public void remove_key() throws IOException, InterruptedException, ClassNotFoundException {
-        nowCom[0]="remove_key";
-        nowCom[1]=getArg();
+        nowCom[0] = "remove_key";
+        nowCom[1] = getArg();
         checkArg(nowCom[1]);
         ci.execute(nowCom, in, null);
-        //  cr.remove(nowCom);
-        //   textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
         visual();
     }
+
     public void replace_if_greater() throws InterruptedException, IOException, ClassNotFoundException {
-        nowCom[0]="replace_if_greater";
-        nowCom[1]=getArg();
+        nowCom[0] = "replace_if_greater";
+        nowCom[1] = getArg();
         checkArg(nowCom[1]);
         Ticket t;
         t = enterTic();
         t.setId(Long.parseLong(nowCom[1]));
         t.setUser(client.getLogin());
         ci.execute(nowCom, in, t);
-        // cr.replace_if_greater(nowCom, t, in);
-        //     textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
     }
+
     public void update() throws IOException, ClassNotFoundException, InterruptedException {
-        nowCom[0]="update";
-        nowCom[1]=getArg();
+        nowCom[0] = "update";
+        nowCom[1] = getArg();
         checkArg(nowCom[1]);
-        Ticket t = new Ticket();
+        Ticket t;
         t = enterTic();
         t.setCreationDate(toLocalDateTime());
         t.setId(Long.parseLong(nowCom[1]));
         t.setUser(client.getLogin());
         ci.execute(nowCom, in, t);
-        //  cr.update(nowCom, t, in);
-        //     textRes.setText(currentBundle.getString(cr.getAnswer()));
     }
 
     public void clear() throws InterruptedException, IOException, ClassNotFoundException {
         nowCom[0] = "clear";
         ci.execute(nowCom, in, null);
-        //     textRes.setText(currentBundle.getString(cr.getAnswer()));
         getCollection();
         fillTable();
     }
 
-    public void setCommands(){
+    public void setCommands() {
         ci = new CommandInvoker();
 
         cr = new CommandReceiver(ci, client.getChannel(), client.getLogin(), client.getPassword());
@@ -561,21 +492,21 @@ public class MainController implements Initializable {
         ci.addCom("exit", exit);
     }
 
-    public String getArg(){
+    public String getArg() {
         return arg.getText();
     }
-    private void checkArg(String arg){
-        if (arg == ""){
+
+    private void checkArg(String arg) {
+        if (arg == "") {
             showAlert(Alert.AlertType.INFORMATION, currentBundle.getString("Error"), currentBundle.getString("EnterArg"));
         }
     }
 
-    public Ticket enterTic(){
+    public Ticket enterTic() {
         try {
             Ticket tic = new Ticket();
-            String fxmlFile = "/RegistWindow/enterTic.fxml";
+            String fxmlFile = "/RegisterWindow/enterTic.fxml";
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-            // fxmlLoader.setResources(currentBundle);
             Parent root = fxmlLoader.load();
             enterTicController enterTicController = fxmlLoader.getController();
             enterTicController.setCurrentBundle(currentBundle);
@@ -583,39 +514,21 @@ public class MainController implements Initializable {
             dialogStage.setResizable(false);
             dialogStage.setScene(new Scene(root));
             dialogStage.requestFocus();
-            dialogStage.initModality(Modality.WINDOW_MODAL);/*
-            if (enterTicController != null) {
-                enterTicController.getName().setText(spaceMarine.getName());
-                enterTicController.getX().setText(String.valueOf(spaceMarine.getCoordinates().getX()));
-                enterTicController.getY().setText(String.valueOf(spaceMarine.getCoordinates().getY()));
-                enterTicController.getHeight().setText(String.valueOf(spaceMarine.getHeight()));
-                enterTicController.getPlace().setText(String.valueOf(spaceMarine.getPlace()));
-                if (spaceMarine.getLoyal() != null)
-                    spaceMarineDialogController.getLoyalBox().setValue(spaceMarine.getLoyal());
-                spaceMarineDialogController.getMeleeWeaponBox().setValue(spaceMarine.getMeleeWeapon());
-                spaceMarineDialogController.getChapterNameField().setText(spaceMarine.getChapter().getName());
-                spaceMarineDialogController.getChapterWorldField().setText(spaceMarine.getChapter().getWorld());
-            }
-            logger.debug("Показываем окно ввода параметров пользователю");*/
+            dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.showAndWait();
 
-            tic = enterTicController.getTic();/*
-            if (spaceMarine != null) {
-                command.setSpaceMarine(spaceMarine);
-                return command;
-            }*/
+            tic = enterTicController.getTic();
             return tic;
         } catch (IOException e) {
             e.printStackTrace();
-            //showAlert(Alert.AlertType.ERROR, currentBundle.getString("Error"), currentBundle.getString("IOException") + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            // showAlert(Alert.AlertType.ERROR, currentBundle.getString("Error"), currentBundle.getString("UnexpectedException") + e.getMessage());
         }
         return null;
     }
+
     @FXML
-    private void exit(){
+    private void exit() {
         System.exit(0);
     }
 
@@ -631,20 +544,16 @@ public class MainController implements Initializable {
             //  newTic(tic);
             if (!LocalCollection.getType().containsKey(tic.getUser()))
                 LocalCollection.getType().put(tic.getUser(), javafx.scene.paint.Color.color(Math.random(), Math.random(), Math.random()));
-            double size = tic.getPrice()/3;
-            if (size>100){
-                size=100;
+            double size = tic.getPrice() / 3;
+            if (size > 100) {
+                size = 100;
             }
             Ellipse ellipse = new Ellipse();
             ellipse.setRadiusX(size);
-            ellipse.setRadiusY(size/2);
+            ellipse.setRadiusY(size / 2);
             ellipse.centerXProperty().bind(drawing.widthProperty().multiply(tic.getCoords().getX()).divide(100));
             ellipse.centerYProperty().bind(drawing.heightProperty().multiply(tic.getCoords().getY()).divide(100));
 
-           /* polygon.setWidth(size);
-            polygon.setHeight(size/3);*//*
-            ellipse.setLayoutX(tic.getX()+drawing.getMaxWidth()/300);
-            ellipse.setLayoutY(tic.getY()+drawing.getHeight()/250);*/
             ellipse.setFill(LocalCollection.getType().get(tic.getUser()));
 
             TranslateTransition tt = new TranslateTransition(Duration.millis(3100), ellipse);
@@ -655,10 +564,8 @@ public class MainController implements Initializable {
             tt.setToY(ellipse.getCenterY());
             tt.setCycleCount(Animation.INDEFINITE);
             tt.setInterpolator(Interpolator.LINEAR);
-            //tt.setToY(drawing.getHeight()-tic.getCoords().getY());
             tt.play();
             if (appear.contains(tic)) {
-                // tt.play();
                 FadeTransition st = new FadeTransition(Duration.millis(3100), ellipse);
                 st.setFromValue(0);
                 st.setToValue(1);
@@ -672,17 +579,7 @@ public class MainController implements Initializable {
                 st.setToValue(0);
                 st.setAutoReverse(true);
                 st.play();
-            } else {/*Path path = new Path();
-                path.getElements().add(new MoveTo(ellipse.getLayoutX(),ellipse.getLayoutY()));
-                path.getElements().add(new CubicCurveTo(380, 0, 380, 120, 200, 120));
-                path.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
-                PathTransition pathTransition = new PathTransition();
-                pathTransition.setDuration(Duration.millis(3000));
-                pathTransition.setPath(path);
-                pathTransition.setNode(ellipse);
-                pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-                pathTransition.setCycleCount(Timeline.INDEFINITE);
-                pathTransition.setAutoReverse(true);*/
+            } else {
                 ellipses.add(ellipse);
                 ellipse.setOnMouseClicked(mouseEvent -> {
                     textRes.setText(tic.toString());
@@ -694,21 +591,25 @@ public class MainController implements Initializable {
         LocalCollection.getArrList().clear();
         LocalCollection.getArrList().addAll(LocalCollection.getTickets());
     }
+
     @FXML
     private void setRussian() {
         setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("ru")));
         changeLanguage();
     }
+
     @FXML
     private void setEnglish() {
         setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("en", "CA")));
         changeLanguage();
     }
+
     @FXML
     private void setIrish() {
         setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("is")));
         changeLanguage();
     }
+
     @FXML
     private void setPolish() {
         setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("pl")));
@@ -718,7 +619,7 @@ public class MainController implements Initializable {
     @FXML
     private void langChoose() {
         String language = lang.getSelectionModel().getSelectedItem().toString();
-        switch (language){
+        switch (language) {
             case "ru":
                 setRussian();
                 break;
@@ -735,14 +636,10 @@ public class MainController implements Initializable {
                 setEnglish();
                 break;
         }
-        //mainController.setCurrentBundle(ResourceBundle.getBundle("bundles/bundle", new Locale(language)));
-        /*setChanged();
-        notifyObservers(mainController.getCurrentBundle());*/
     }
 
 
     private void changeLanguage() {
-        //lang.setText(mainController.getCurrentBundle().getString("selectLanguage"));
         name.setText(getCurrentBundle().getString("name"));
         creationDate.setText(getCurrentBundle().getString("creationDate"));
         type.setText(getCurrentBundle().getString("type"));
@@ -777,16 +674,17 @@ public class MainController implements Initializable {
         count_greater_than_price.setText(getCurrentBundle().getString("cgtp"));
         userFilter.setPromptText(getCurrentBundle().getString("user"));
     }
-    public LocalDateTime toLocalDateTime(){
+
+    public LocalDateTime toLocalDateTime() {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withLocale(getCurrentBundle().getLocale());
         String ld = LocalDateTime.now().format(formatter);
-        //ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.now(), setZone());
-        LocalDateTime dt = LocalDateTime.ofInstant(Instant.now(), setZone());//*.currentBundle.getLocale())parse(ld, formatter*/);
+        LocalDateTime dt = LocalDateTime.ofInstant(Instant.now(), setZone());
         return dt;
     }
-    private ZoneId setZone(){
+
+    private ZoneId setZone() {
         System.out.println(currentBundle.getLocale().getDisplayLanguage());
-        switch (currentBundle.getLocale().getDisplayLanguage()){
+        switch (currentBundle.getLocale().getDisplayLanguage()) {
             case "английский":
                 return ZoneId.of("Canada/Yukon");
             case "русский":

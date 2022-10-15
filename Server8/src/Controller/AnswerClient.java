@@ -1,4 +1,4 @@
-package Requests;
+package Controller;
 
 import Other.Answer;
 
@@ -22,17 +22,15 @@ public class AnswerClient extends RecursiveAction {
 
     @Override
     protected void compute() {
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(msg);
-            //oos.close();
             byte[] data = baos.toByteArray();
             channel.write(ByteBuffer.wrap(data));
-
             log.info("Answer sent");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 }

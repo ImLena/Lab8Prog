@@ -18,12 +18,12 @@ public class History extends Command {
     }
 
     @Override
-    protected String help(){
+    protected String help() {
         return "history - show last 11 commands";
     }
 
     @Override
-    protected void execute(String[] args, Scanner in, Ticket t){
+    protected void execute(String[] args, Scanner in, Ticket t) {
         commandReceiver.history();
     }
 }

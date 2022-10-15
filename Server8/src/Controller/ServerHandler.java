@@ -1,4 +1,4 @@
-package Requests;
+package Controller;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -34,7 +34,7 @@ public class ServerHandler {
     public void close() {
         try {
             serverSocketChannel.close();
+        } catch (IOException ignored) {
         }
-        catch (IOException ignored){}
     }
 }

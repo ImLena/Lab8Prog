@@ -1,10 +1,10 @@
 package Actions;
 
-import DataBase.TicketsDB;
-import Collections.MapCommands;
+import Collections.CommandsManager;
 import Collections.Ticket;
-import Other.ReadCommand;
+import DataBase.TicketsDB;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,17 +22,17 @@ public class Update extends Command {
 
 
     @Override
-    public Answer execute(ReadCommand com, MapCommands mc) throws IOException {
+    public Answer execute(ReadCommand com, CommandsManager mc) throws IOException {
         try {
             String answ;
             String arg = com.getStrArgs();
             Long id = Long.valueOf(arg);
             Ticket tic = com.getTicket();
-            if (mc.getTickets().containsKey(id)){
-                if(mc.getTickets().get(id).getUser().equals(tic.getUser())){
+            if (mc.getTickets().containsKey(id)) {
+                if (mc.getTickets().get(id).getUser().equals(tic.getUser())) {
                     TicketsDB.update(tic, id);
                     try {
-                    lock.writeLock().lock();
+                        lock.writeLock().lock();
                         answ = mc.update(id, tic);
                     } finally {
                         lock.writeLock().unlock();
@@ -41,9 +41,9 @@ public class Update extends Command {
                 } else {
                     return new Answer("wrongUser", null);
                 }
-            } else{
-            return new Answer("noID", null);
-        }
+            } else {
+                return new Answer("noID", null);
+            }
 
         } catch (NumberFormatException | SQLException e) {
             return new Answer("wrongKey", null);

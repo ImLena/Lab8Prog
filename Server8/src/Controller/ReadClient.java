@@ -1,4 +1,4 @@
-package Requests;
+package Controller;
 
 import Other.Answer;
 import Other.ReadCommand;
@@ -11,7 +11,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
-public class ReadClient implements Callable<ReadCommand>{
+public class ReadClient implements Callable<ReadCommand> {
     private SocketChannel channel;
 
     public ReadClient(SocketChannel channel) {
@@ -36,10 +36,9 @@ public class ReadClient implements Callable<ReadCommand>{
                 new AnswerClient(channel, new Answer("Unidentified object type", null));
             }
             return null;
-        }catch(IOException | ClassNotFoundException | NullPointerException e){
+        } catch (IOException | ClassNotFoundException | NullPointerException e) {
             channel.close();
             log.warning("Client disconnected.");
-           // e.printStackTrace();
             return null;
         }
     }

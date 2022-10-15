@@ -1,8 +1,8 @@
 package Actions;
 
-import Collections.MapCommands;
-import Other.ReadCommand;
+import Collections.CommandsManager;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -18,12 +18,12 @@ public class PrintDescending extends Command {
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Override
-    public Answer execute(ReadCommand com, MapCommands mc) {
+    public Answer execute(ReadCommand com, CommandsManager mc) {
         String answ;
         try {
             lock.readLock().lock();
             answ = mc.print_descending();
-        }finally {
+        } finally {
             lock.readLock().unlock();
         }
         return new Answer(answ, null);

@@ -9,7 +9,7 @@ public class Exit extends Command {
     transient final CommandReceiver commandReceiver;
     private static final long serialVersionUID = 32L;
 
-    public Exit (CommandReceiver commandReceiver) {
+    public Exit(CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
 
@@ -19,7 +19,7 @@ public class Exit extends Command {
     }
 
     @Override
-    protected String help(){
+    protected String help() {
         return "help - all available commands";
     }
 }

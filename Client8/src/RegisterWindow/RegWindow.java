@@ -1,11 +1,5 @@
-package RegistWindow;
+package RegisterWindow;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import Collections.TicketType;
 import MainWindow.MainController;
 import Other.Client;
 import Other.Login;
@@ -17,6 +11,10 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class RegWindow {
 
@@ -51,33 +49,10 @@ public class RegWindow {
     @FXML
     private ComboBox<String> lang;
 
-    // This method is called by the FXMLLoader when initialization is complete
-           /* VBox vbox = new VBox();
-vbox.setPadding(new Insets(10, 10, 10, 10));
-vbox.setSpacing(10);
-    Button btn1 = new Button("1");
-    Button btn2 = new Button("2");
-    Button btn3 = new Button("3");
-    Button btn4 = new Button("4");
-vbox.getChildren().addAll(btn1, btn2, btn3, btn4);
-    */
-/*    void initialize() throws InterruptedException, IOException, ClassNotFoundException {
-        username.textProperty().addListener(
-                (observable, oldValue, newValue) -> user = newValue);
-        password.textProperty().addListener(
-                (observable, oldValue, newValue) -> pass = newValue);
-        loginButton.setOnAction(actionEvent -> {
-            loginButtonClick(new ActionEvent());
-        });
-        registerButton.setOnAction(actionEvent -> {
-            registerButtonClick(new ActionEvent());
-        });
-    }*/
-
-public void initialize(){
-    ObservableList<String> languages = FXCollections.observableArrayList("en_CA","ru", "is","pl");
-    lang.getItems().addAll(languages);
-}
+    public void initialize() {
+        ObservableList<String> languages = FXCollections.observableArrayList("en_CA", "ru", "is", "pl");
+        lang.getItems().addAll(languages);
+    }
 
 
     public void loginButtonClick(ActionEvent actionEvent) {
@@ -85,7 +60,7 @@ public void initialize(){
             String login = username.getText();
             String pass = password.getText();
             command[0] = "login";
-            command[1]= login;
+            command[1] = login;
             command[2] = pass;
             String answer = Login.registerUser(Client.getChannel(), command);
             if (answer.equals("user logged")) {
@@ -94,16 +69,14 @@ public void initialize(){
                 client.setLogin(command[1]);
                 client.setPassword(command[2]);
                 Stage authorizedStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                authorizedStage.close();/*
-                Client client = new Client(command[1]);
-                client.client(command[1], command[2]);*/
+                authorizedStage.close();
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error", null, "Wrong login or password");
             }
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", null,  "IOException " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error", null, "IOException " + e.getMessage());
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR,"Error", null, "Unexpected Exception " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error", null, "Unexpected Exception " + e.getMessage());
         }
     }
 
@@ -112,7 +85,7 @@ public void initialize(){
             String login = username.getText();
             String pass = password.getText();
             command[0] = "regist";
-            command[1]= login;
+            command[1] = login;
             command[2] = pass;
             String answer = Login.registerUser(Client.getChannel(), command);
             if (answer.equals("user registered")) {
@@ -128,11 +101,12 @@ public void initialize(){
                 showAlert(Alert.AlertType.ERROR, "Error", null, "Wrong login or password");
             }
         } catch (IOException | InterruptedException | ClassNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", null,  "IOException" + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error", null, "IOException" + e.getMessage());
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR,"Error", null, "Unexpected Exception" + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error", null, "Unexpected Exception" + e.getMessage());
         }
     }
+
     private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -148,21 +122,25 @@ public void initialize(){
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
+
     @FXML
     private void setRussian() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("ru")));
         changeLanguage();
     }
+
     @FXML
     private void setEnglish() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("en", "CA")));
         changeLanguage();
     }
+
     @FXML
     private void setIrish() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("is")));
         changeLanguage();
     }
+
     @FXML
     private void setPolish() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("bundles/bundles", new Locale("pl")));
@@ -172,7 +150,7 @@ public void initialize(){
     @FXML
     private void langChoose() {
         String language = lang.getSelectionModel().getSelectedItem().toString();
-        switch (language){
+        switch (language) {
             case "ru":
                 setRussian();
                 break;
@@ -189,14 +167,10 @@ public void initialize(){
                 setEnglish();
                 break;
         }
-        //mainController.setCurrentBundle(ResourceBundle.getBundle("bundles/bundle", new Locale(language)));
-        /*setChanged();
-        notifyObservers(mainController.getCurrentBundle());*/
     }
 
 
     private void changeLanguage() {
-        //lang.setText(mainController.getCurrentBundle().getString("selectLanguage"));
         logInButton.setText(mainController.getCurrentBundle().getString("login"));
         registerButton.setText(mainController.getCurrentBundle().getString("register"));
         loginStr.setText(mainController.getCurrentBundle().getString("login"));

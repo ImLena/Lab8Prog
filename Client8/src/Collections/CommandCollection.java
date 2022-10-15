@@ -8,7 +8,8 @@ import java.util.LinkedHashMap;
 public class CommandCollection implements Serializable {
 
     public final LinkedHashMap<String, Command> commands = new LinkedHashMap<>();
-    public void addCom(CommandReceiver cr){
+
+    public void addCom(CommandReceiver cr) {
         Command clear = new Clear(cr);
         Command cgtp = new CountGreaterThanPrice(cr);
         Command es = new ExecuteScript(cr);
@@ -36,11 +37,11 @@ public class CommandCollection implements Serializable {
         commands.put("update", update);
     }
 
-    public Command getCommand(String str){
+    public Command getCommand(String str) {
         return commands.get(str);
     }
 
-    public LinkedHashMap<String, Command> getCommands(){
+    public LinkedHashMap<String, Command> getCommands() {
         return commands;
     }
 

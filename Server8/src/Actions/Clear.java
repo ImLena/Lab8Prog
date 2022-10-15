@@ -1,9 +1,9 @@
 package Actions;
 
-import Collections.MapCommands;
+import Collections.CommandsManager;
 import DataBase.TicketsDB;
-import Other.ReadCommand;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,7 +19,7 @@ public class Clear extends Command {
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Override
-    public Answer execute(ReadCommand com, MapCommands mc) throws IOException, SQLException {
+    public Answer execute(ReadCommand com, CommandsManager mc) throws IOException, SQLException {
         TicketsDB.clear(com.getLogin());
         String s;
         try {

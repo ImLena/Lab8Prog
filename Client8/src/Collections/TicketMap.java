@@ -1,10 +1,8 @@
 package Collections;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Класс, определяющий поля коллекции
@@ -40,7 +38,7 @@ public class TicketMap implements Comparable<Ticket>, Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return (name + ", " + coordinates.getX() + ", " + coordinates.getY() + ", " + price + ", " + type + ", " + person.getHeight() + ", " + location.getX() + ", " + location.getY() + ", " + location.getZ() + ", " + location.getName() + "\n");
 
     }

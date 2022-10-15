@@ -32,6 +32,7 @@ public class Person implements Serializable {
     public DoubleProperty getHeightProperty() {
         return new SimpleDoubleProperty(height);
     }
+
     public Property getLocationProperty() {
         return new SimpleObjectProperty(location);
     }

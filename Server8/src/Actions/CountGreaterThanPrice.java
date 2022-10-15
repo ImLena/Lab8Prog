@@ -1,8 +1,8 @@
 package Actions;
 
-import Collections.MapCommands;
-import Other.ReadCommand;
+import Collections.CommandsManager;
 import Other.Answer;
+import Other.ReadCommand;
 
 import java.io.IOException;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -14,19 +14,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CountGreaterThanPrice extends Command {
     private static final long serialVersionUID = 32L;
-    private ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     @Override
-    public Answer execute(ReadCommand com, MapCommands mc) throws IOException {
+    public Answer execute(ReadCommand com, CommandsManager mc) throws IOException {
         String price = com.getStrArgs();
         float pr = Float.parseFloat(price);
         try {
             lock.readLock().lock();
             return new Answer(mc.count_greater_than_price(pr), null);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException | NullPointerException e) {
             return new Answer("wrongKey", null);
-        } catch (NullPointerException e){
-            return new Answer("wrongKey",null);
         } finally {
             lock.readLock().unlock();
         }
